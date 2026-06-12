@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { POSTS } from "@/data/posts";
 import { CONTAINER, CREAM, Arrow } from "@/components/ui";
 import { PageIntro, CtaSection } from "@/components/sections";
 
+const DESCRIPTION =
+  "Plain-English writing for UK driving instructors: cutting admin, stopping no-shows, getting paid on time and running a calmer driving school.";
+
 export const metadata = meta(
   "Blog",
-  "Plain-English writing for UK driving instructors: cutting admin, stopping no-shows, getting paid on time and running a calmer driving school.",
+  DESCRIPTION,
   "/blog",
 );
 
@@ -15,6 +19,21 @@ export default function BlogPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/blog",
+            name: "Driive blog",
+            description: DESCRIPTION,
+            type: "CollectionPage",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Blog"
         title={
@@ -35,7 +54,7 @@ export default function BlogPage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="group flex flex-col rounded-[2rem] bg-white p-8 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)] transition hover:-translate-y-0.5"
+                className="group flex flex-col rounded-xl bg-white p-8 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)] transition hover:-translate-y-0.5"
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-400">
                   {post.dateLabel} · {post.readingTime}

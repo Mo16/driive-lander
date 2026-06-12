@@ -6,10 +6,8 @@ import {
   FREE_INCLUDED,
   PRO_INCLUDED,
   PRO_MONTHLY_PENCE,
+  PRO_ANNUAL_PENCE,
   PRO_ANNUAL_MONTHLY_EQUIV_PENCE,
-  FOUNDERS_MONTHLY_PENCE,
-  FOUNDERS_ANNUAL_PENCE,
-  FOUNDERS_ANNUAL_MONTHLY_EQUIV_PENCE,
   formatPounds,
 } from "@/data/pricing";
 
@@ -22,12 +20,8 @@ export default function PricingPlans({
 }) {
   const [billing, setBilling] = useState<Billing>("annual");
 
-  const standardPence =
+  const proPence =
     billing === "annual" ? PRO_ANNUAL_MONTHLY_EQUIV_PENCE : PRO_MONTHLY_PENCE;
-  const foundersPence =
-    billing === "annual"
-      ? FOUNDERS_ANNUAL_MONTHLY_EQUIV_PENCE
-      : FOUNDERS_MONTHLY_PENCE;
 
   return (
     <div className="text-left">
@@ -88,26 +82,62 @@ export default function PricingPlans({
 
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
         <div
-          className="rounded-[2.5rem] p-8 sm:p-12"
-          style={{ backgroundColor: CREAM }}
+          className={`rounded-xl p-8 text-white sm:p-12 ${
+            tone === "blue" ? "ring-1 ring-white/25" : ""
+          }`}
+          style={{ backgroundColor: "#2546F5" }}
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-neutral-500">
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#F9D7E2]">
             Free
           </p>
-          <p className="mt-6 text-5xl font-semibold tracking-[-0.03em] text-neutral-900">
+          <p className="mt-6 text-5xl font-semibold tracking-[-0.03em]">
             £0
-            <span className="ml-2 text-lg font-medium tracking-normal text-neutral-500">
+            <span className="ml-2 text-lg font-medium tracking-normal text-[#F9D7E2]/80">
               forever
             </span>
           </p>
-          <p className="mt-2 text-sm font-medium text-neutral-500">
+          <p className="mt-2 text-sm font-medium text-[#F9D7E2]/80">
             No card, no trial clock
           </p>
-          <p className="mt-4 text-base leading-relaxed text-neutral-600">
+          <p className="mt-4 text-base leading-relaxed text-[#F9D7E2]/90">
             Everything you need to run a round of up to ten pupils.
           </p>
           <ul className="mt-8 space-y-3.5">
             {FREE_INCLUDED.map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#F9D7E2] text-[#2546F5]">
+                  <Check className="h-3 w-3" />
+                </span>
+                <p className="text-[15px] font-medium leading-snug">{item}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div
+          className="rounded-xl p-8 sm:p-12"
+          style={{ backgroundColor: CREAM }}
+        >
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-neutral-500">
+            Pro
+          </p>
+          <p className="mt-6 text-5xl font-semibold tracking-[-0.03em] text-neutral-900">
+            {formatPounds(proPence)}
+            <span className="ml-2 text-lg font-medium tracking-normal text-neutral-500">
+              a month
+            </span>
+          </p>
+          <p className="mt-2 text-sm font-medium text-neutral-500">
+            {billing === "annual"
+              ? `Billed annually — ${formatPounds(PRO_ANNUAL_PENCE)} a year, two months free`
+              : "Billed monthly — cancel any time"}
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-neutral-600">
+            Unlimited pupils, plus the teaching tools that set your school
+            apart.
+          </p>
+          <ul className="mt-8 space-y-3.5">
+            {PRO_INCLUDED.map((item) => (
               <li key={item} className="flex items-start gap-3">
                 <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#2546F5] text-white">
                   <Check className="h-3 w-3" />
@@ -115,52 +145,6 @@ export default function PricingPlans({
                 <p className="text-[15px] font-medium leading-snug text-neutral-800">
                   {item}
                 </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div
-          className={`rounded-[2.5rem] p-8 text-white sm:p-12 ${
-            tone === "blue" ? "ring-1 ring-white/25" : ""
-          }`}
-          style={{ backgroundColor: "#2546F5" }}
-        >
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.14em] text-[#F9D7E2]">
-            Pro
-            <span className="rounded-full bg-[#F9D7E2] px-3 py-1 text-[10px] font-semibold normal-case tracking-normal text-[#2546F5]">
-              Founding price
-            </span>
-          </p>
-          <p className="mt-6 text-5xl font-semibold tracking-[-0.03em]">
-            <span className="mr-3 align-middle text-2xl font-medium tracking-normal text-[#F9D7E2]/50 line-through">
-              {formatPounds(standardPence)}
-            </span>
-            {formatPounds(foundersPence)}
-            <span className="ml-2 text-lg font-medium tracking-normal text-[#F9D7E2]/80">
-              a month
-            </span>
-          </p>
-          <p className="mt-2 text-sm font-medium text-[#F9D7E2]/80">
-            {billing === "annual"
-              ? `Billed annually — ${formatPounds(FOUNDERS_ANNUAL_PENCE)} a year, two months free`
-              : "Billed monthly — cancel any time"}
-          </p>
-          <p className="mt-3 text-sm font-medium text-[#F9D7E2]">
-            Founding instructor price — join from the waitlist and keep it
-            forever.
-          </p>
-          <p className="mt-4 text-base leading-relaxed text-[#F9D7E2]/90">
-            Unlimited pupils, plus the teaching tools that set your school
-            apart.
-          </p>
-          <ul className="mt-8 space-y-3.5">
-            {PRO_INCLUDED.map((item) => (
-              <li key={item} className="flex items-start gap-3">
-                <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#F9D7E2] text-[#2546F5]">
-                  <Check className="h-3 w-3" />
-                </span>
-                <p className="text-[15px] font-medium leading-snug">{item}</p>
               </li>
             ))}
           </ul>

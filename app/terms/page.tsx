@@ -1,15 +1,33 @@
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { PageIntro, LegalDoc } from "@/components/sections";
+
+const DESCRIPTION =
+  "The website and waitlist terms for Driive, including pre-launch product descriptions, IP and governing law.";
 
 export const metadata = meta(
   "Terms of use",
-  "The terms that apply to this website and the Driive waitlist, including founding-offer terms, intellectual property and governing law.",
+  DESCRIPTION,
   "/terms",
 );
 
 export default function TermsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/terms",
+            name: "Driive terms of use",
+            description: DESCRIPTION,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Terms of use", path: "/terms" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Legal"
         title="Terms of use"
@@ -28,7 +46,7 @@ export default function TermsPage() {
             heading: "The waitlist",
             paragraphs: [
               "Joining the waitlist is free and creates no obligation on you to purchase anything, and no obligation on us to provide access by any particular date. Access opens in waves at our discretion, and waitlist position is one of several factors in invitation order.",
-              "Founding-offer terms communicated to waitlist members by email will be honoured as described in that email. Until such an email is sent, nothing on this website constitutes a binding price or offer.",
+              "Any offer terms communicated to waitlist members by email will be honoured as described in that email. Until such an email is sent, nothing on this website constitutes a binding price or offer.",
               "You may leave the waitlist at any time using the unsubscribe link in any email or by contacting privacy@driive.app.",
             ],
           },

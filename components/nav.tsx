@@ -107,7 +107,7 @@ export default function Nav() {
 
               {open === menu.key && (
                 <div className="absolute left-0 top-full pt-3">
-                  <div className="w-[300px] rounded-2xl bg-white p-2 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
+                  <div className="w-[300px] rounded-xl bg-white p-2 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
                     {menu.items.map((item) => (
                       <Link
                         key={item.href}

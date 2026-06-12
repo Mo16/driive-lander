@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { PageIntro, LegalDoc } from "@/components/sections";
+
+const DESCRIPTION =
+  "How Driive collects, uses and protects personal data under UK GDPR, including retention, processors and your data rights.";
 
 export const metadata = meta(
   "Privacy policy",
-  "How Driive collects, uses and protects personal data under UK GDPR — what we store, why, for how long, and the rights you can exercise.",
+  DESCRIPTION,
   "/privacy",
 );
 
@@ -20,6 +24,20 @@ const Email = ({ to }: { to: string }) => (
 export default function PrivacyPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/privacy",
+            name: "Driive privacy policy",
+            description: DESCRIPTION,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Privacy policy", path: "/privacy" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Legal"
         title="Privacy policy"
@@ -60,7 +78,7 @@ export default function PrivacyPage() {
           {
             heading: "Why we process it and our lawful bases",
             paragraphs: [
-              "Waitlist emails — to confirm your place, tell you when access opens, and share launch and founding-offer updates. Lawful basis: consent (Article 6(1)(a) UK GDPR), which you give by submitting the form and can withdraw at any time.",
+              "Waitlist emails — to confirm your place, tell you when access opens, and share launch updates. Lawful basis: consent (Article 6(1)(a) UK GDPR), which you give by submitting the form and can withdraw at any time.",
               "Correspondence — to respond to enquiries and provide support. Lawful basis: legitimate interests (Article 6(1)(f)).",
               "Technical and security data — to protect the site against abuse and keep it available. Lawful basis: legitimate interests (Article 6(1)(f)).",
               "We do not sell personal data, and we do not use waitlist emails for anything beyond Driive launch communications.",

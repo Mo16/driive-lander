@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { CONTAINER, CREAM, Eyebrow, Road, Check } from "@/components/ui";
 import { PageIntro } from "@/components/sections";
 import WaitlistForm from "@/components/waitlist-form";
 
+const DESCRIPTION =
+  "Driive for driving schools is coming soon: multi-instructor diaries, shared pupil records, school-wide payments and reporting. Register interest.";
+
 export const metadata = meta(
   "For driving schools",
-  "Driive for driving schools is coming soon: multi-instructor diaries, shared pupil records, school-wide payments and reporting. Register interest to be first in line.",
+  DESCRIPTION,
   "/schools",
 );
 
@@ -32,6 +36,20 @@ const PLANNED = [
 export default function SchoolsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/schools",
+            name: "Driive for driving schools",
+            description: DESCRIPTION,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "For driving schools", path: "/schools" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="For driving schools · Coming soon"
         title={
@@ -65,7 +83,7 @@ export default function SchoolsPage() {
             {PLANNED.map((item) => (
               <div
                 key={item.title}
-                className="rounded-[2rem] p-8"
+                className="rounded-xl p-8"
                 style={{ backgroundColor: CREAM }}
               >
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-[#2546F5] text-white">

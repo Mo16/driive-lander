@@ -1,15 +1,33 @@
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { PageIntro, LegalDoc } from "@/components/sections";
+
+const DESCRIPTION =
+  "Driive uses only essential cookies. Read what they do, why no consent banner is needed and what happens if that changes.";
 
 export const metadata = meta(
   "Cookie policy",
-  "Driive uses only essential cookies. This page explains what they do, why no consent banner is needed, and what happens if we ever add more.",
+  DESCRIPTION,
   "/cookies",
 );
 
 export default function CookiesPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/cookies",
+            name: "Driive cookie policy",
+            description: DESCRIPTION,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Cookie policy", path: "/cookies" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Legal"
         title="Cookie policy"

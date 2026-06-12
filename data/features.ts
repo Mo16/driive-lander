@@ -6,6 +6,10 @@ export type Feature = {
   metaTitle: string;
   metaDescription: string;
   benefits: { title: string; body: string }[];
+  /** Topical Q&As rendered on the feature page and emitted as FAQPage
+      JSON-LD. Answers must stand alone out of context — answer engines
+      quote them without the surrounding page. */
+  faqs: { q: string; a: string }[];
   /** Slugs shown in the "Works with" grid — curated so every feature
       receives inbound links from related pages, not just the first three. */
   related: [string, string, string];
@@ -16,10 +20,10 @@ export const FEATURES: Feature[] = [
     slug: "smart-diary",
     name: "Smart Diary",
     tagline: "Your week, sorted before it starts.",
-    lede: "Pupils request the gaps you actually have, open slots are offered to your pupils in one tap, and every lesson lands in the calendar you already use.",
-    metaTitle: "Smart Diary — Driving instructor diary software",
+    lede: "Day, week and month views built on your real working pattern — pupils request the gaps you actually have, cancelled slots are re-offered in one tap, and every lesson lands in the calendar you already use.",
+    metaTitle: "Smart Diary — Driving instructor diary & booking app",
     metaDescription:
-      "A diary built for UK driving instructors. Booking requests against your real availability, one-tap open-slot offers, and sync with Google, Apple and Outlook calendars.",
+      "The driving instructor diary that fills itself. Pupils request your real gaps, cancelled slots are re-offered in one tap, and every lesson syncs to Google, Apple and Outlook Calendar.",
     benefits: [
       {
         title: "Pupils request the slots you actually have",
@@ -32,6 +36,32 @@ export const FEATURES: Feature[] = [
       {
         title: "Synced to the calendar you already use",
         body: "Every lesson appears in Google, Apple or Outlook Calendar with the pick-up point attached, and moves the moment a lesson moves. Pupils get calendar invites too, so the time lives in both diaries.",
+      },
+    ],
+    faqs: [
+      {
+        q: "How do driving instructors manage their diary?",
+        a: "Most instructors run their week from a paper diary and a stream of texts, where every change means rubbing out, rewriting and re-confirming. Driive replaces that with a diary built on your real working pattern — hours, recurring breaks, days off and the travel time you need between pick-ups. Pupils request the gaps you actually have, you approve each one with a tap, and [payments](/features/payments) and pupil records update with the lesson.",
+      },
+      {
+        q: "Can pupils book driving lessons online?",
+        a: "With Driive, yes — pupils request lessons from the genuine gaps in their instructor's diary, from their own side of the app. The instructor approves or declines each request, so nothing lands in the diary without their say-so. Instructors can even require card payment before a booking is confirmed — unpaid holds release automatically after 48 hours, so no slot is ever blocked by a maybe.",
+      },
+      {
+        q: "What happens when a pupil cancels a driving lesson?",
+        a: "The slot goes back on the market instead of becoming dead time. In Driive the instructor offers the freed slot to all of their pupils — or just a few — in one tap; the first request they approve takes it, and everyone else is stood down automatically. If the lesson was prepaid, the hours return to the pupil's [credit balance](/features/payments) on their own, so the money side sorts itself too.",
+      },
+      {
+        q: "Does Driive sync with Google, Apple and Outlook calendars?",
+        a: "Yes, three ways. Subscribe once and a live feed keeps your calendar app current by itself; every confirmed lesson also arrives as a calendar invite that updates on reschedule and disappears on cancellation; and connecting Google Calendar pushes changes the moment they happen. Pupils get invites too, so the lesson lives in both diaries with the pick-up point attached.",
+      },
+      {
+        q: "Can I control when pupils can book lessons?",
+        a: "Completely. Pupils only ever see the genuine gaps in the working pattern the instructor sets — working hours, recurring breaks like the school run, days off and the travel buffer between pick-ups — and every request still needs the instructor's approval before it lands in the diary. Nothing is ever booked over a lunch break or a Sunday off.",
+      },
+      {
+        q: "Can Driive replace my paper diary?",
+        a: "That is exactly what it is built for. The Smart Diary gives you day, week and month views, colour-codes every lesson by payment status, counts your free gaps so you know what is sellable, and shows the pick-up point on each booking. Because bookings, [payments](/features/payments) and [progress](/features/progress) live in one place, a change made once updates everywhere — no rubbing out, no re-texting.",
       },
     ],
     related: ["pupil-hub", "payments", "lesson-tools"],
@@ -58,6 +88,20 @@ export const FEATURES: Feature[] = [
         body: "Add a parent or guardian to any pupil and they get a private, read-only view of lessons, progress and payments on the web — no app needed, and they can step away whenever they like.",
       },
     ],
+    faqs: [
+      {
+        q: "How do driving instructors keep pupil records?",
+        a: "Driive gives every learner one profile holding contact details, lesson history, credit balance, notes and theory and practical test dates — so nothing lives in a scrolled-back text thread. [Progress](/features/progress) and [payments](/features/payments) update the record automatically as you teach.",
+      },
+      {
+        q: "How do pupils join an instructor on Driive?",
+        a: "The instructor shares a join code; the pupil enters it in their own app and the instructor approves the request. Instructors can also add existing pupils themselves in minutes and invite them to connect later.",
+      },
+      {
+        q: "Can parents follow a learner's driving lessons and progress?",
+        a: "Yes. An instructor can add a parent or guardian to any pupil, giving them a private, read-only web view of lessons, progress and payments. There is no app for them to download, and they can step away whenever they like.",
+      },
+    ],
     related: ["progress", "payments", "enquiries"],
   },
   {
@@ -80,6 +124,20 @@ export const FEATURES: Feature[] = [
       {
         title: "Refunds and disputes, handled fairly",
         body: "A pupil can refund an unused payment themselves before it pays out, and anything later goes through a proper dispute flow with evidence on both sides. No awkward standoffs over £35.",
+      },
+    ],
+    faqs: [
+      {
+        q: "How do driving instructors take card payments?",
+        a: "With Driive, pupils pay by card inside the app — one lesson or several in a single payment — or through a payment link the instructor sends. Cash and bank-transfer lessons are marked paid in a tap, so [the accounts](/features/accounts) stay complete whichever way the money arrives.",
+      },
+      {
+        q: "What is a prepaid block of driving lessons?",
+        a: "A block is a bundle of lesson hours bought up front, usually at a small discount — ten hours is the classic. Driive tracks every block to the penny and burns hours only when a lesson is completed, never when it is booked, so the balance can never drift.",
+      },
+      {
+        q: "When do instructors receive their money?",
+        a: "Card payments land in the instructor's bank account the day after they settle — next-day payouts rather than weekly batches. Every payment is recorded in [Accounts & Tax](/features/accounts) automatically, so income never needs reconstructing later.",
       },
     ],
     related: ["accounts", "pupil-hub", "smart-diary"],
@@ -106,6 +164,20 @@ export const FEATURES: Feature[] = [
         body: "When a pupil asks about booking the test, the answer is a record built across real lessons, not a feeling. Pair it with a [DL25-style mock test](/features/lesson-tools) and the conversation gets easier for both of you.",
       },
     ],
+    faqs: [
+      {
+        q: "What skills does a learner driver need before the driving test?",
+        a: "The DVSA's 'Ready to Pass?' guidance sets out the skills a learner should manage independently before booking a test — junctions, roundabouts, manoeuvres, dual carriageways and independent driving among them. Driive tracks each pupil against the full syllabus, lesson by lesson. Driive is independent and not affiliated with or endorsed by the DVSA.",
+      },
+      {
+        q: "How do you know when a pupil is ready for their driving test?",
+        a: "Test-readiness is a judgement, but it should rest on evidence: a record of each skill moving from introduced to test-ready across real lessons, backed by a [DL25-style mock test](/features/lesson-tools) close to the pass standard. Driive keeps that record for every pupil, so the test conversation is built on facts rather than gut feel.",
+      },
+      {
+        q: "Can pupils see their own driving progress?",
+        a: "Yes. Pupils watch their progress build in their own side of the Driive app after every lesson. Seeing how close test-ready is keeps them motivated — and makes the next block of lessons an easy decision.",
+      },
+    ],
     related: ["lesson-tools", "pupil-hub", "smart-diary"],
   },
   {
@@ -128,6 +200,20 @@ export const FEATURES: Feature[] = [
       {
         title: "A debrief pupils keep",
         body: "Mock test results, route sketches and any resources you upload — theory sheets, exercises, diagrams — all land in the lesson debrief in [the pupil's app](/features/pupil-hub), ready to revisit before the next drive.",
+      },
+    ],
+    faqs: [
+      {
+        q: "What is a DL25 driving test report?",
+        a: "The DL25 is the marking sheet used on the UK practical driving test, recording driving faults, serious faults and dangerous faults by category. Driive's mock test mode mirrors that format, so pupils sit practice tests marked the way the real one is. Driive is independent and not affiliated with or endorsed by the DVSA.",
+      },
+      {
+        q: "How do you run a mock driving test?",
+        a: "Pick a realistic test-length route, mark faults as they happen rather than coaching, and debrief at the end the way an examiner would. With Driive you mark minors, serious and dangerous faults against the DVSA categories live with a timer running, and the result saves to the lesson and the pupil's [progress record](/features/progress).",
+      },
+      {
+        q: "What should a driving lesson debrief include?",
+        a: "A good debrief covers what went well, what needs practice and one clear focus for the next lesson. In Driive the debrief lives in the pupil's app — mock test results, route sketches and any resources the instructor uploads — so it is still there when the pupil revisits it before the next drive.",
       },
     ],
     related: ["progress", "smart-diary", "website"],
@@ -154,6 +240,20 @@ export const FEATURES: Feature[] = [
         body: "A running tax estimate and tax-pot percentage through the year, then a year-end review that pulls it all together — export clean records for your accountant or self-assessment in one tap.",
       },
     ],
+    faqs: [
+      {
+        q: "Do driving instructors need to do a Self Assessment tax return?",
+        a: "Most independent UK driving instructors are self-employed, so they report income to HMRC through Self Assessment. Driive records lesson income, expenses and mileage as you teach and keeps a running tax estimate through the year — clean records for your return, though not a substitute for an accountant's advice.",
+      },
+      {
+        q: "Can driving instructors claim mileage as an expense?",
+        a: "Business mileage is one of an instructor's biggest costs, and HMRC allows it under either simplified mileage rates or actual running costs. Driive logs mileage per car and supports both methods, with receipts attached to every expense as it happens.",
+      },
+      {
+        q: "How does Driive help at tax year end?",
+        a: "Through the year Driive keeps a running tax estimate and a tax-pot percentage, so the bill is never a surprise. At year end, a review pulls income, expenses and mileage together — ready to export for your accountant or Self Assessment in one tap.",
+      },
+    ],
     related: ["payments", "smart-diary", "website"],
   },
   {
@@ -176,6 +276,20 @@ export const FEATURES: Feature[] = [
       {
         title: "Enquiries become pupils",
         body: "The built-in enquiry form drops every lead into your [enquiries inbox](/features/enquiries), with their details already filled in. When they are ready to start, convert them to a pupil in a tap.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Do driving instructors need a website?",
+        a: "Learners increasingly search online before they message anyone, and a professional page — prices, areas covered, reviews — wins enquiries that a social profile alone does not. Driive Pro includes a site at yourname.driive.app, so instructors get one without paying a developer.",
+      },
+      {
+        q: "What should a driving instructor website include?",
+        a: "The things a searching learner actually checks: lesson prices, areas covered, the car and transmission they will learn in, reviews and an easy way to enquire. A Driive site covers all of those on one page, with the [enquiry form](/features/enquiries) feeding leads straight into the app.",
+      },
+      {
+        q: "How do I get a driving school website without a developer?",
+        a: "With Driive, you pick your web address, write a headline, add your services, prices, photos and brand colour, and publish — changes save as you type. There is no hosting, domain or developer to manage, and the site looks right on every phone.",
       },
     ],
     related: ["enquiries", "accounts", "lesson-tools"],
@@ -202,10 +316,34 @@ export const FEATURES: Feature[] = [
         body: "When a lead is ready to start, one tap turns the enquiry into a pupil — details carried across, first lesson ready to book. No lead quietly forgotten in a messages app.",
       },
     ],
+    faqs: [
+      {
+        q: "How do driving instructors get new pupils?",
+        a: "Word of mouth, local search and a visible web presence bring the leads — the harder part is not losing them in voicemails and message threads. Driive captures every enquiry from [your website](/features/website) or shareable form in one inbox, each with a status, so every lead gets a reply.",
+      },
+      {
+        q: "How should an instructor follow up a new pupil enquiry?",
+        a: "Quickly and visibly — learners often enquire with more than one instructor, and the first clear reply usually wins. Driive tracks each lead through new, contacted, awaiting reply and converted, so nobody sits forgotten while you are out teaching.",
+      },
+      {
+        q: "Can I use the enquiry form on an existing website?",
+        a: "Yes. Your Driive enquiry form works as a shareable link or embedded on any site you already have, and every submission lands in the same inbox. When a lead is ready to start, one tap converts them into a pupil with their details carried across.",
+      },
+    ],
     related: ["website", "pupil-hub", "smart-diary"],
   },
 ];
 
 export function getFeature(slug: string) {
   return FEATURES.find((f) => f.slug === slug);
+}
+
+const INLINE_LINK = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+/** Plain-text Q&As for FAQPage JSON-LD — markdown links reduced to anchor text. */
+export function featureFaqSchema(feature: Feature) {
+  return feature.faqs.map((faq) => ({
+    question: faq.q,
+    answer: faq.a.replace(INLINE_LINK, "$1"),
+  }));
 }

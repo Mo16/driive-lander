@@ -1,12 +1,16 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { CONTAINER, CREAM, Eyebrow, Road } from "@/components/ui";
 import { PageIntro, CtaSection } from "@/components/sections";
 
+const DESCRIPTION =
+  "Learn why Driive is being built in the UK for UK driving instructors, the principles behind the product and how we handle instructor data.";
+
 export const metadata = meta(
   "About",
-  "Driive is built in the UK for UK driving instructors. Read why we are building it, the principles behind the product, and what we will never do with your data.",
+  DESCRIPTION,
   "/about",
 );
 
@@ -50,6 +54,21 @@ const PRINCIPLES: { title: string; body: ReactNode }[] = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/about",
+            name: "About Driive",
+            description: DESCRIPTION,
+            type: "AboutPage",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="About Driive"
         title={
@@ -118,7 +137,7 @@ export default function AboutPage() {
           </h2>
           <div className="mt-12 grid gap-5 sm:grid-cols-2">
             {PRINCIPLES.map((item) => (
-              <div key={item.title} className="rounded-[2rem] bg-white p-8 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)]">
+              <div key={item.title} className="rounded-xl bg-white p-8 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)]">
                 <h3 className="text-xl font-semibold tracking-tight text-neutral-900">
                   {item.title}
                 </h3>

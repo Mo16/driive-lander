@@ -534,7 +534,7 @@ function AccountsVisual() {
           {bars.map((h, i) => (
             <div
               key={i}
-              className={`flex-1 rounded-t-md ${
+              className={`flex-1 rounded-t-xl ${
                 i === bars.length - 1 ? "bg-[#2546F5]" : "bg-[#2546F5]/30"
               }`}
               style={{ height: `${h}%` }}
@@ -581,7 +581,7 @@ function WebsiteVisual() {
           {["Services", "Reviews ★ 4.9", "Areas covered"].map((label) => (
             <span
               key={label}
-              className="rounded-lg border border-neutral-200 px-2 py-2"
+              className="rounded-xl border border-neutral-200 px-2 py-2"
             >
               {label}
             </span>
@@ -658,12 +658,12 @@ function EnquiryCard({ enquiry }: { enquiry: Enquiry }) {
           {ENQUIRY_STAGES[enquiry.stage]}
         </span>
       </div>
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-1.5">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
           {enquiry.chips.map((chip) => (
             <span
               key={chip}
-              className="truncate rounded-full border border-neutral-200 px-2.5 py-1 text-[11px] font-medium text-neutral-600"
+              className="rounded-full border border-neutral-200 px-2.5 py-1 text-[11px] font-medium text-neutral-600"
             >
               {chip}
             </span>
@@ -814,6 +814,7 @@ const FEATURES: Feature[] = [
 
 export default function FeatureShowcase() {
   const [active, setActive] = useState(0);
+  const [open, setOpen] = useState<number | null>(0);
   const blocks = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -834,7 +835,7 @@ export default function FeatureShowcase() {
   return (
     <>
       {/* Desktop: scroll-driven sticky showcase */}
-      <div className="hidden rounded-[2.5rem] bg-white lg:grid lg:grid-cols-2">
+      <div className="hidden rounded-xl bg-white lg:grid lg:grid-cols-2">
         <div className="px-10 xl:px-16">
           {FEATURES.map((feature, i) => (
             <div
@@ -877,7 +878,7 @@ export default function FeatureShowcase() {
           ))}
         </div>
 
-        <div className="relative rounded-r-[2.5rem] bg-[#FEF8FA]">
+        <div className="relative rounded-r-xl bg-[#FEF8FA]">
           <div className="sticky top-24 h-[64vh]">
             {FEATURES.map((feature, i) => (
               <div
@@ -895,26 +896,61 @@ export default function FeatureShowcase() {
         </div>
       </div>
 
-      {/* Mobile: stacked list */}
-      <div className="space-y-12 rounded-[2.5rem] bg-white p-6 sm:p-8 lg:hidden">
-        {FEATURES.map((feature) => (
-          <div key={feature.id} className="border-t border-neutral-200 pt-8 first:border-t-0 first:pt-0">
-            <h3 className="text-3xl font-semibold tracking-[-0.03em]">
-              {feature.title}
-            </h3>
-            <p className="mt-4 text-base leading-relaxed text-neutral-500">
-              {feature.body}
-            </p>
-            <div className="mt-6 rounded-3xl bg-[#FEF8FA] p-5">
-              {feature.visual}
-            </div>
-            <a
-              href={`/features/${feature.slug}`}
-              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#2546F5]"
+      {/* Mobile: tap-to-open accordion — text only, the visuals stay desktop */}
+      <div className="rounded-xl bg-white px-6 py-2 sm:px-8 lg:hidden">
+        {FEATURES.map((feature, i) => (
+          <div
+            key={feature.id}
+            className="border-t border-neutral-200 first:border-t-0"
+          >
+            <button
+              type="button"
+              onClick={() => setOpen(open === i ? null : i)}
+              aria-expanded={open === i}
+              className="flex w-full items-center justify-between gap-4 py-6 text-left"
             >
-              {feature.cta}
-              <Arrow />
-            </a>
+              <h3
+                className={`text-2xl font-semibold tracking-[-0.03em] transition-colors duration-300 ${
+                  open === i ? "text-neutral-900" : "text-neutral-400"
+                }`}
+              >
+                {feature.title}
+              </h3>
+              <span
+                className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border border-neutral-200 text-neutral-500 transition-transform duration-300 ${
+                  open === i ? "rotate-45" : ""
+                }`}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M12 5v14M5 12h14"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+            </button>
+            <div
+              className={`grid transition-all duration-500 ${
+                open === i
+                  ? "grid-rows-[1fr] opacity-100"
+                  : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="text-base leading-relaxed text-neutral-500">
+                  {feature.body}
+                </p>
+                <a
+                  href={`/features/${feature.slug}`}
+                  className="mb-7 mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#2546F5]"
+                >
+                  {feature.cta}
+                  <Arrow />
+                </a>
+              </div>
+            </div>
           </div>
         ))}
       </div>

@@ -5,7 +5,19 @@ import Link from "next/link";
 import FeatureShowcase from "./feature-showcase";
 import WaitlistForm from "@/components/waitlist-form";
 import PricingPlans from "@/components/pricing-plans";
-import { FaqSection, DEFAULT_FAQS } from "@/components/sections";
+import { FaqSection, DEFAULT_FAQS, DEFAULT_FAQ_SCHEMA } from "@/components/sections";
+import { JsonLd, faqPageJsonLd, softwareApplicationJsonLd } from "@/lib/json-ld";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  SEO_KEYWORDS,
+  SITE_NAME,
+  SITE_URL,
+  SOCIAL_IMAGE,
+  SOCIAL_IMAGE_ALT,
+  SOCIAL_IMAGE_HEIGHT,
+  SOCIAL_IMAGE_WIDTH,
+} from "@/lib/site";
 import {
   BLUE,
   PINK,
@@ -19,13 +31,46 @@ import {
 } from "@/components/ui";
 import { FEATURES } from "@/data/features";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://driive.app";
-
 export const metadata: Metadata = {
-  title: { absolute: "Driive — Run your whole driving school from one app" },
-  description:
-    "Diary, pupils, card payments, prepaid blocks, DVSA progress, mock tests and your books — the all-in-one app for UK driving instructors.",
+  title: { absolute: DEFAULT_TITLE },
+  description: DEFAULT_DESCRIPTION,
+  keywords: SEO_KEYWORDS,
   alternates: { canonical: "/" },
+  openGraph: {
+    siteName: SITE_NAME,
+    type: "website",
+    locale: "en_GB",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: SITE_URL,
+    images: [
+      {
+        url: SOCIAL_IMAGE,
+        width: SOCIAL_IMAGE_WIDTH,
+        height: SOCIAL_IMAGE_HEIGHT,
+        alt: SOCIAL_IMAGE_ALT,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@driiveapp",
+    creator: "@driiveapp",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [SOCIAL_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 /* --------------------------------- phone ---------------------------------- */
@@ -59,7 +104,7 @@ function DarkPhone() {
           </span>
         </div>
         <div className="flex-1 space-y-2.5 px-4 py-4">
-          <div className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3 ring-1 ring-white/10">
+          <div className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 ring-1 ring-white/10">
             <span className="text-white">Emily Brown · DL25-style</span>
             <span className="text-[11px] text-white/50">38:12</span>
           </div>
@@ -71,13 +116,13 @@ function DarkPhone() {
           ].map(([item, faults]) => (
             <div
               key={item}
-              className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3 ring-1 ring-white/10"
+              className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 ring-1 ring-white/10"
             >
               <span className="text-white/80">{item}</span>
               <span className="text-[11px] text-white/50">{faults}</span>
             </div>
           ))}
-          <div className="rounded-2xl bg-white px-4 py-3.5 text-neutral-900">
+          <div className="rounded-xl bg-white px-4 py-3.5 text-neutral-900">
             <p className="flex items-center justify-between text-[13px] font-semibold">
               Result · pass standard
               <span className="rounded-full bg-[#2546F5] px-2.5 py-0.5 text-[10px] font-semibold text-white">
@@ -102,7 +147,7 @@ function DarkPhone() {
 function Hero() {
   return (
     <section
-      className="relative overflow-hidden pb-20 pt-32 lg:pb-28 lg:pt-44"
+      className="relative -mb-px overflow-hidden pb-0 pt-32 lg:pb-28 lg:pt-44"
       style={{ backgroundColor: BLUE }}
     >
       <div className={`${CONTAINER} grid items-center gap-16 lg:grid-cols-2`}>
@@ -119,15 +164,15 @@ function Hero() {
             One app.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#F9D7E2]/90 sm:text-xl">
-            Diary, pupils, payments, DVSA progress and your books — Driive
-            runs the admin around your lessons, so your evenings are yours
-            again.
+            A simple driving instructor app for UK ADIs and PDIs to manage your diary, pupils, payments, lesson reminders and log progress, so you can spend less time on admin and more time teaching.
           </p>
           <div className="mt-10">
             <WaitlistForm variant="blue" source="home-hero" />
           </div>
         </div>
-        <div className="relative mx-auto self-end lg:mx-0 lg:h-[560px] lg:w-full">
+        {/* The image is wider than the viewport, so it's absolutely positioned —
+            in flow it would stretch the grid track and throw the centring off. */}
+        <div className="relative h-[min(180vw,800px)] w-full self-end lg:h-[560px]">
           <div className="absolute -inset-10 -z-0 rounded-full bg-[#F9D7E2]/20 blur-3xl lg:hidden" />
           <Image
             src="/images/phone.png"
@@ -135,7 +180,7 @@ function Hero() {
             width={1254}
             height={1254}
             priority
-            className="relative mx-auto w-[420px] drop-shadow-2xl sm:w-[560px] lg:absolute lg:left-1/2 lg:top-[72%] lg:w-[820px] lg:max-w-none lg:-translate-x-1/2 lg:-translate-y-1/2 xl:w-[980px]"
+            className="absolute left-1/2 top-0 w-[min(180vw,800px)] max-w-none -translate-x-1/2 drop-shadow-2xl lg:top-[72%] lg:w-[820px] lg:-translate-y-1/2 xl:w-[980px]"
           />
         </div>
       </div>
@@ -147,7 +192,15 @@ function Hero() {
 
 function Mission() {
   return (
-    <section className="py-24 lg:py-36" style={{ backgroundColor: PINK }}>
+    <section className="relative py-24 lg:py-36" style={{ backgroundColor: PINK }}>
+      {/* Below lg the wave hangs over the hero's bottom edge from here (the
+          page-level <Road /> is lg-only), so the hero's arm image runs under
+          it. The 2px pink backstop stops the hero's clipped blue edge from
+          blending through the seam at fractional zoom/scale factors. */}
+      <div aria-hidden className="absolute inset-x-0 -top-16 sm:-top-24 lg:hidden">
+        <Road from="transparent" to={PINK} />
+        <div className="h-2" style={{ backgroundColor: PINK }} />
+      </div>
       <div className={CONTAINER}>
         <Eyebrow>Driive · The one app you&apos;ve been searching for</Eyebrow>
         <p className="mt-10 max-w-5xl text-[clamp(1.8rem,3.6vw,3.3rem)] font-medium leading-snug tracking-[-0.02em] text-[#2546F5]">
@@ -164,16 +217,50 @@ function SpeedBand() {
   return (
     <section className="py-24 lg:py-32" style={{ backgroundColor: BLUE }}>
       <div className={CONTAINER}>
-        <LogoMark tile={PINK} road={BLUE} className="h-10 w-10" />
-        <h2 className="mt-8 max-w-3xl text-[clamp(2.6rem,5.5vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em] text-[#F9D7E2]">
-          More hours teaching.
-          <br />
-          Zero hours chasing.
-        </h2>
-        <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#F9D7E2]/90">
-          Driive takes the chasing off your plate — so the hours you get back
-          go into the job that matters: getting every pupil to test day.
-        </p>
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-end">
+          <div>
+            <LogoMark tile={PINK} road={BLUE} className="h-10 w-10" />
+            <h2 className="mt-8 text-[clamp(2.6rem,5.5vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em] text-[#F9D7E2]">
+              Every pupil,
+              <br />
+              test-day ready.
+            </h2>
+            <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#F9D7E2]/90">
+              Mark skills off as you teach, debrief every lesson and run
+              DVSA-style mock tests. Your pupil watches it all in their own
+              app — so &ldquo;am I ready?&rdquo; answers itself.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                href="/features/progress"
+                className="inline-flex items-center gap-2 rounded-full bg-[#F9D7E2] px-7 py-4 text-[15px] font-medium text-[#2546F5] transition hover:bg-white"
+              >
+                Explore progress tracking
+                <Arrow />
+              </Link>
+              <Link
+                href="/features/lesson-tools"
+                className="inline-flex items-center rounded-full bg-white/10 px-7 py-4 text-[15px] font-medium text-white ring-1 ring-white/15 transition hover:bg-white/15"
+              >
+                Mock tests &amp; lesson tools
+              </Link>
+            </div>
+          </div>
+          <ul className="space-y-4 text-lg font-medium text-[#F9D7E2]">
+            <li className="flex items-start gap-3">
+              <Check className="mt-1" />
+              The full DVSA syllabus, marked as you teach
+            </li>
+            <li className="flex items-start gap-3">
+              <Check className="mt-1" />
+              Every lesson ends with a debrief
+            </li>
+            <li className="flex items-start gap-3">
+              <Check className="mt-1" />
+              Pupils follow along in their own app
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   );
@@ -250,13 +337,12 @@ function ProblemSolved() {
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-end">
           <div>
             <h2 className="text-[clamp(2.8rem,6vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.03em] text-[#2546F5]">
-              Get paid on time.
+              Less chasing. <br></br> Less admin.
               <br />
-              Books done for you.
+              Cleaner books.
             </h2>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-[#2546F5]/90 sm:text-xl">
-              Pupils pay by card in the app, balances stay right to the
-              penny, and every lesson writes itself into your books.
+              Take pupil payments in-app, track lesson balances automatically, and keep your driving instructor records organised from one simple dashboard.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
@@ -282,7 +368,7 @@ function ProblemSolved() {
             </li>
             <li className="flex items-start gap-3">
               <Check className="mt-1" />
-              Cash still welcome — we won&apos;t tell HMRC 😉
+              Cash still welcome, We wont tell HMRC 😉
             </li>
             <li className="flex items-start gap-3">
               <Check className="mt-1" />
@@ -296,14 +382,14 @@ function ProblemSolved() {
         </div>
 
         <div className="mt-16 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-[2rem] bg-white p-7 sm:p-10">
+          <div className="rounded-xl bg-white p-7 sm:p-10">
             <div className="flex items-center gap-2">
               <LogoMark tile={BLUE} road="#FFFFFF" className="h-6 w-6" />
               <span className="text-sm font-semibold">
                 Ledger · every money movement
               </span>
             </div>
-            <div className="mt-5 flex items-center gap-2">
+            <div className="mt-5 hidden items-center gap-2 lg:flex">
               <span
                 className="rounded-full px-3.5 py-1.5 text-xs font-semibold text-[#2546F5]"
                 style={{ backgroundColor: PINK }}
@@ -314,7 +400,7 @@ function ProblemSolved() {
                 2025–26
               </span>
             </div>
-            <div className="mt-4 grid grid-cols-3 gap-4 rounded-2xl border border-neutral-200 p-5">
+            <div className="mt-4 grid grid-cols-3 gap-4 rounded-xl border border-neutral-200 p-5">
               {[
                 ["In", "£800.00", "text-[#2546F5]"],
                 ["Out", "£42.50", "text-neutral-900"],
@@ -330,22 +416,21 @@ function ProblemSolved() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex items-center gap-2">
+            <div className="mt-4 hidden items-center gap-2 lg:flex">
               {["All", "Money in", "Money out"].map((filter, i) => (
                 <span
                   key={filter}
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${
-                    i === 0
-                      ? "font-semibold text-[#2546F5]"
-                      : "border border-neutral-200 text-neutral-500"
-                  }`}
+                  className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${i === 0
+                    ? "font-semibold text-[#2546F5]"
+                    : "border border-neutral-200 text-neutral-500"
+                    }`}
                   style={i === 0 ? { backgroundColor: PINK } : undefined}
                 >
                   {filter}
                 </span>
               ))}
             </div>
-            <div className="mt-4 rounded-2xl border border-neutral-200 px-5">
+            <div className="mt-4 hidden rounded-xl border border-neutral-200 px-5 lg:block">
               {(
                 [
                   ["Aisha Khan", "Lesson payment · 6 Jun", "+£80.00", "in"],
@@ -359,9 +444,8 @@ function ProblemSolved() {
                   className="flex items-center gap-3 border-t border-neutral-100 py-4 first:border-t-0"
                 >
                   <span
-                    className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-[#2546F5] ${
-                      direction === "in" ? "bg-[#2546F5]/10" : ""
-                    }`}
+                    className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-[#2546F5] ${direction === "in" ? "bg-[#2546F5]/10" : ""
+                      }`}
                     style={
                       direction === "out"
                         ? { backgroundColor: PINK }
@@ -377,19 +461,22 @@ function ProblemSolved() {
                     </p>
                   </div>
                   <span
-                    className={`shrink-0 text-sm font-semibold ${
-                      direction === "in" ? "text-[#2546F5]" : "text-neutral-900"
-                    }`}
+                    className={`shrink-0 text-sm font-semibold ${direction === "in" ? "text-[#2546F5]" : "text-neutral-900"
+                      }`}
                   >
                     {amount}
                   </span>
                 </div>
               ))}
             </div>
+            <p className="mt-5 text-sm leading-relaxed text-neutral-500 lg:hidden">
+              Lesson payments, expenses and blocks land here as you teach —
+              tax-year totals, done for you.
+            </p>
           </div>
 
           <div
-            className="rounded-[2rem] p-7 text-white sm:p-10"
+            className="rounded-xl p-7 text-white sm:p-10"
             style={{ backgroundColor: BLUE }}
           >
             <div className="flex items-center gap-2">
@@ -398,7 +485,7 @@ function ProblemSolved() {
                 Taking a payment
               </span>
             </div>
-            <div className="mt-4 rounded-2xl bg-white p-5 text-neutral-900">
+            <div className="mt-4 rounded-xl bg-white p-5 text-neutral-900">
               <div className="flex items-center gap-3">
                 <span
                   className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-[#2546F5]"
@@ -419,10 +506,10 @@ function ProblemSolved() {
                   Unpaid
                 </span>
               </div>
-              <p className="mt-5 text-xs font-medium text-neutral-500">
+              <p className="mt-5 hidden text-xs font-medium text-neutral-500 lg:block">
                 Amount (£)
               </p>
-              <div className="mt-2 rounded-xl border border-neutral-200 px-4 py-3 text-sm font-medium">
+              <div className="mt-2 hidden rounded-xl border border-neutral-200 px-4 py-3 text-sm font-medium lg:block">
                 38.00
               </div>
               <div className="mt-4 space-y-2.5">
@@ -457,60 +544,14 @@ function PupilProgress() {
   return (
     <section className="pb-24 lg:pb-32" style={{ backgroundColor: BLUE }}>
       <div className={CONTAINER}>
-        <div className="rounded-[2.5rem] bg-white p-8 sm:p-12 lg:p-16">
-
-          <div className="mt-10 grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-end">
-            <div>
-              <h2 className="text-[clamp(2.6rem,5.5vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em] text-[#2546F5]">
-                Every pupil,
-                <br />
-                test-day ready.
-              </h2>
-              <p className="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-600">
-                Mark skills off as you teach, debrief every lesson and run
-                DVSA-style mock tests. Your pupil watches it all in their own
-                app — so &ldquo;am I ready?&rdquo; answers itself.
-              </p>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/features/progress"
-                  className="inline-flex items-center gap-2 rounded-full px-7 py-4 text-[15px] font-medium text-white transition hover:opacity-90"
-                  style={{ backgroundColor: BLUE }}
-                >
-                  Explore progress tracking
-                  <Arrow />
-                </Link>
-                <Link
-                  href="/features/lesson-tools"
-                  className="inline-flex items-center rounded-full bg-[#2546F5]/10 px-7 py-4 text-[15px] font-medium text-[#2546F5] transition hover:bg-[#2546F5]/15"
-                >
-                  Mock tests &amp; lesson tools
-                </Link>
-              </div>
-            </div>
-            <ul className="space-y-4 text-lg font-medium text-[#2546F5]">
-              <li className="flex items-start gap-3">
-                <Check className="mt-1" />
-                The full DVSA syllabus, marked as you teach
-              </li>
-              <li className="flex items-start gap-3">
-                <Check className="mt-1" />
-                Every lesson ends with a debrief
-              </li>
-              <li className="flex items-start gap-3">
-                <Check className="mt-1" />
-                Pupils follow along in their own app
-              </li>
-            </ul>
-          </div>
-
-          <div className="mt-16 grid gap-6 lg:grid-cols-2">
-            <div className="rounded-[2rem] bg-[#F0EEE7] p-7 sm:p-9">
+        <div className="rounded-xl bg-white p-6 sm:p-10 lg:p-14">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="rounded-xl bg-[#F0EEE7] p-7 sm:p-9">
               <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-[#2546F5]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#2546F5]" />
                 DVSA progress
               </span>
-              <div className="mt-6 rounded-2xl bg-white p-5">
+              <div className="mt-6 rounded-xl bg-white p-5">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold">Emily Brown · skills</p>
                   <span className="text-xs text-neutral-400">
@@ -534,13 +575,12 @@ function PupilProgress() {
                     >
                       <span className="font-medium">{skill}</span>
                       <span
-                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                          status === "Test-ready"
-                            ? "bg-[#2546F5] text-white"
-                            : status === "Practised"
-                              ? "bg-[#F9D7E2] text-[#2546F5]"
-                              : "border border-neutral-200 text-neutral-500"
-                        }`}
+                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${status === "Test-ready"
+                          ? "bg-[#2546F5] text-white"
+                          : status === "Practised"
+                            ? "bg-[#F9D7E2] text-[#2546F5]"
+                            : "border border-neutral-200 text-neutral-500"
+                          }`}
                       >
                         {status}
                       </span>
@@ -557,13 +597,13 @@ function PupilProgress() {
               </p>
             </div>
 
-            <div className="rounded-[2rem] bg-[#F0EEE7] p-7 sm:p-9">
+            <div className="rounded-xl bg-[#F0EEE7] p-7 sm:p-9">
               <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-[#2546F5]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#2546F5]" />
                 The pupil&apos;s side
               </span>
               <div className="mt-6 space-y-3">
-                <div className="rounded-2xl bg-white p-4 text-sm">
+                <div className="rounded-xl bg-white p-4 text-sm">
                   <p className="flex items-center justify-between font-medium text-neutral-800">
                     Next lesson · Thu 14:00
                     <span className="rounded-full bg-[#F9D7E2] px-2.5 py-0.5 text-[11px] font-semibold text-[#2546F5]">
@@ -574,13 +614,13 @@ function PupilProgress() {
                     2 hrs · covered by block credit
                   </p>
                 </div>
-                <div className="rounded-2xl bg-[#2546F5] p-4 text-sm text-white">
+                <div className="rounded-xl bg-[#2546F5] p-4 text-sm text-white">
                   <p className="font-medium">Mock test · pass standard</p>
                   <p className="mt-1 text-white/70">
                     4 minors · saved to your debrief
                   </p>
                 </div>
-                <div className="rounded-2xl bg-white p-4 text-sm">
+                <div className="rounded-xl bg-white p-4 text-sm">
                   <p className="font-medium text-neutral-800">
                     Lesson debrief · Tue 10:00
                   </p>
@@ -618,14 +658,12 @@ function WebsiteEnquiries() {
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-end">
           <div>
             <h2 className="text-[clamp(2.8rem,6vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.03em] text-neutral-900">
-              Your own website.
+              Turn local learners
               <br />
-              Enquiries that enrol.
+              into new pupils.
             </h2>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-600 sm:text-xl">
-              Driive Pro puts a real marketing site at yourname.driive.app —
-              prices, areas covered, reviews — and every enquiry it captures
-              lands in the app, ready to follow up between lessons.
+              Get a professional driving instructor website built from your Driive profile, with your prices, areas, reviews and enquiry form already connected to your app.
             </p>
             <Link
               href="/features/website"
@@ -639,7 +677,7 @@ function WebsiteEnquiries() {
           <ul className="space-y-4 text-lg font-medium text-neutral-900">
             <li className="flex items-start gap-3">
               <Check className="mt-1 text-[#2546F5]" />
-              yourname.driive.app, live in minutes
+              Your own driive.app website, live in minutes
             </li>
             <li className="flex items-start gap-3">
               <Check className="mt-1 text-[#2546F5]" />
@@ -647,12 +685,12 @@ function WebsiteEnquiries() {
             </li>
             <li className="flex items-start gap-3">
               <Check className="mt-1 text-[#2546F5]" />
-              New, contacted, enrolled — tracked
+              New enquiries tracked from first message to first lesson
             </li>
           </ul>
         </div>
 
-        <div className="mt-16 overflow-hidden rounded-[2rem] border-[12px] border-neutral-950 bg-white shadow-[0_60px_120px_-40px_rgba(0,0,0,0.35)]">
+        <div className="mt-16 overflow-hidden rounded-xl border-[6px] border-neutral-950 bg-white shadow-[0_60px_120px_-40px_rgba(0,0,0,0.35)] sm:border-[12px]">
           <div className="flex items-center gap-2 border-b border-neutral-100 px-5 py-3">
             <span className="flex gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-neutral-200" />
@@ -684,7 +722,7 @@ function WebsiteEnquiries() {
               <span className="mt-8 inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#2546F5]">
                 Book your first lesson
               </span>
-              <div className="mt-10 flex flex-wrap gap-2 text-xs font-medium text-white/80">
+              <div className="mt-8 hidden flex-wrap gap-2 text-xs font-medium text-white/80 sm:mt-10 sm:flex">
                 {["Prices & blocks", "Areas covered", "Reviews ★ 4.9"].map(
                   (label) => (
                     <span
@@ -738,7 +776,7 @@ function WebsiteEnquiries() {
         </div>
 
         <div className="mt-16 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-[2rem] bg-white p-7 sm:p-10">
+          <div className="min-w-0 rounded-xl bg-white p-6 sm:p-10">
             <div className="flex items-center gap-2">
               <LogoMark tile={BLUE} road="#FFFFFF" className="h-6 w-6" />
               <span className="text-sm font-semibold">Enquiries</span>
@@ -749,7 +787,7 @@ function WebsiteEnquiries() {
                 3 new
               </span>
             </div>
-            <div className="mt-5 rounded-2xl border border-neutral-200 p-5">
+            <div className="mt-5 rounded-xl border border-neutral-200 p-4 sm:p-5">
               <div className="flex items-start gap-3">
                 <span
                   className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[13px] font-semibold text-[#2546F5]"
@@ -771,39 +809,40 @@ function WebsiteEnquiries() {
                 {ENQUIRY_STAGES.map((stage, i) => (
                   <span
                     key={stage}
-                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold ${
-                      i === 0
-                        ? "bg-[#2546F5] text-white"
-                        : "border border-neutral-200 font-medium text-neutral-400"
-                    }`}
+                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold ${i === 0
+                      ? "bg-[#2546F5] text-white"
+                      : "border border-neutral-200 font-medium text-neutral-400"
+                      }`}
                   >
                     {stage}
                   </span>
                 ))}
               </div>
-              <div className="mt-4 flex flex-wrap items-center gap-1.5 border-t border-neutral-100 pt-4">
-                {["Website", "Manual", "PO5 2AB"].map((chip) => (
+              <div className="mt-4 flex flex-col gap-3 border-t border-neutral-100 pt-4 sm:flex-row sm:items-center">
+                <div className="hidden flex-wrap items-center gap-1.5 sm:flex">
+                  {["Website", "Manual", "PO5 2AB"].map((chip) => (
+                    <span
+                      key={chip}
+                      className="rounded-full border border-neutral-200 px-2.5 py-1 text-[11px] font-medium text-neutral-600"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5 sm:ml-auto">
                   <span
-                    key={chip}
-                    className="rounded-full border border-neutral-200 px-2.5 py-1 text-[11px] font-medium text-neutral-600"
-                  >
-                    {chip}
-                  </span>
-                ))}
-                <span className="ml-auto flex items-center gap-1.5">
-                  <span
-                    className="rounded-full px-4 py-1.5 text-[11px] font-semibold text-[#2546F5]"
+                    className="flex-1 rounded-full px-4 py-2 text-center text-[11px] font-semibold text-[#2546F5] sm:flex-none sm:py-1.5"
                     style={{ backgroundColor: PINK }}
                   >
                     Message
                   </span>
-                  <span className="rounded-full bg-[#2546F5] px-4 py-1.5 text-[11px] font-semibold text-white">
+                  <span className="flex-1 rounded-full bg-[#2546F5] px-4 py-2 text-center text-[11px] font-semibold text-white sm:flex-none sm:py-1.5">
                     Call
                   </span>
-                </span>
+                </div>
               </div>
             </div>
-            <div className="mt-3 flex items-center gap-3 rounded-2xl border border-neutral-100 px-5 py-3.5">
+            <div className="mt-3 hidden items-center gap-3 rounded-xl border border-neutral-100 px-5 py-3.5 sm:flex">
               <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#2546F5]/10 text-[11px] font-semibold text-[#2546F5]">
                 SA
               </span>
@@ -830,14 +869,14 @@ function WebsiteEnquiries() {
           </div>
 
           <div
-            className="rounded-[2rem] p-7 text-white sm:p-10"
+            className="min-w-0 rounded-xl p-6 text-white sm:p-10"
             style={{ backgroundColor: BLUE }}
           >
             <div className="flex items-center gap-2">
               <LogoMark tile={PINK} road={BLUE} className="h-6 w-6" />
               <span className="text-sm font-semibold">One tap later</span>
             </div>
-            <div className="mt-5 rounded-2xl bg-white p-5 text-neutral-900">
+            <div className="mt-5 rounded-xl bg-white p-5 text-neutral-900">
               <p className="flex items-center justify-between text-sm font-semibold">
                 Ethan Walsh
                 <span className="rounded-full bg-[#2546F5] px-2.5 py-0.5 text-[11px] font-semibold text-white">
@@ -888,23 +927,15 @@ function PricingBand() {
         <h2 className="mx-auto max-w-4xl text-[clamp(2.8rem,6.5vw,6rem)] font-semibold leading-[1.02] tracking-[-0.03em] text-[#F9D7E2]">
           Free to start.
           <br />
-          Pro when you&apos;re full.
+          Upgrade when you’re ready.
         </h2>
         <p className="mx-auto mt-8 max-w-xl text-lg text-[#F9D7E2]/90 sm:text-xl">
-          Run up to ten pupils free, forever. Founding instructors get Pro
-          from £4.99 a month — unlimited pupils, mock tests and your own
-          website, locked in forever.
+          For instructors ready to run their full diary from one app. Unlock unlimited pupils, advanced teaching tools, mock tests, lesson resources and your own website to bring new enquiries straight into Driive.
         </p>
         <div className="mt-12">
           <PricingPlans tone="blue" />
         </div>
-        <Link
-          href="/pricing"
-          className="mt-12 inline-flex items-center gap-2 rounded-full bg-[#F9D7E2] px-8 py-4 text-[15px] font-medium text-[#2546F5] transition hover:bg-white"
-        >
-          Explore pricing
-          <Arrow />
-        </Link>
+      
       </div>
     </section>
   );
@@ -1038,9 +1069,9 @@ function ExploreGrid() {
             <Link
               key={feature.slug}
               href={`/features/${feature.slug}`}
-              className="group flex items-center gap-4 rounded-3xl bg-white/10 p-6 ring-1 ring-white/15 transition hover:bg-white/15"
+              className="group flex items-center gap-4 rounded-xl bg-white/10 p-6 ring-1 ring-white/15 transition hover:bg-white/15"
             >
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#F9D7E2] text-[#2546F5]">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#F9D7E2] text-[#2546F5]">
                 {exploreIcons[feature.slug]}
               </span>
               <span className="min-w-0 flex-1">
@@ -1091,7 +1122,7 @@ function UnderHood() {
         </div>
 
         <div className="relative">
-          <div className="rounded-3xl bg-[#16181D] p-6 font-mono text-[13px] leading-7 text-neutral-400 shadow-2xl ring-1 ring-white/10 sm:p-8">
+          <div className="rounded-xl bg-[#16181D] p-6 font-mono text-[13px] leading-7 text-neutral-400 shadow-2xl ring-1 ring-white/10 sm:p-8">
             <p className="mb-4 font-sans text-sm font-semibold text-white">
               Every lesson, settled
             </p>
@@ -1119,7 +1150,7 @@ function UnderHood() {
               </code>
             </pre>
           </div>
-          <div className="absolute -bottom-6 right-6 hidden items-center gap-2 rounded-2xl bg-white px-5 py-4 text-sm font-medium text-neutral-900 shadow-xl sm:flex">
+          <div className="absolute -bottom-6 right-6 hidden items-center gap-2 rounded-xl bg-white px-5 py-4 text-sm font-medium text-neutral-900 shadow-xl sm:flex">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
             Lesson completed · payout scheduled
           </div>
@@ -1141,8 +1172,8 @@ function FinalCta() {
           Now put it to work.
         </h2>
         <p className="mt-8 max-w-xl text-lg leading-relaxed text-neutral-600 sm:text-xl">
-          Access opens in waves through 2026, in waitlist order. Founding
-          instructors get in first — and get founding terms.
+          Access opens in waves through 2026, in waitlist order. Join now
+          and you&apos;re in first.
         </p>
         <div className="mt-10">
           <WaitlistForm variant="light" source="home-final" />
@@ -1154,61 +1185,19 @@ function FinalCta() {
 
 /* ----------------------------------- page ---------------------------------- */
 
-const softwareJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Driive",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "iOS, Android, Web",
-  description:
-    "Diary, payments, prepaid blocks, DVSA progress tracking, mock tests and accounts for UK driving instructors.",
-  url: SITE_URL,
-};
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      q: "When does Driive launch?",
-      a: "Driive is onboarding instructors in waves through 2026, starting with the waitlist in order of signup.",
-    },
-    {
-      q: "Is Driive for solo instructors or driving schools?",
-      a: "Driive is currently for solo driving instructors as we launch. After launch we'll be adding support for driving schools, with shared diaries and multi-instructor management.",
-    },
-    {
-      q: "How much will Driive cost?",
-      a: "Driive is free for up to ten pupils. Pro — unlimited pupils plus mock tests, lesson tools and your own website — is £11.99 a month or £119.90 a year. Founding instructors who join from the waitlist lock in £5.99 a month or £59.90 a year, forever.",
-    },
-    {
-      q: "Do pupils need to download anything?",
-      a: "Pupils get their own free side of the Driive app to request lessons, pay by card, see their credit and track DVSA progress. Parents and guardians can follow along through a read-only web link with no app at all.",
-    },
-    {
-      q: "Can I export my data?",
-      a: "Yes. Your pupils, lessons, payment records and progress history are yours, and you can export them whenever you like. Under UK GDPR you also have the right to request a full copy of your personal data at any time.",
-    },
-  ].map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a },
-  })),
-};
-
 export default function Page() {
   return (
     <main className="overflow-x-clip">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      <JsonLd
+        data={[
+          softwareApplicationJsonLd(),
+          faqPageJsonLd(DEFAULT_FAQ_SCHEMA),
+        ]}
       />
       <Hero />
-      <Road from={BLUE} to={PINK} />
+      <div className="hidden lg:block">
+        <Road from={BLUE} to={PINK} />
+      </div>
       <Mission />
       <ShowcaseSection />
       <ProblemSolved />

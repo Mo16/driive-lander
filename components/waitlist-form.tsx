@@ -51,7 +51,7 @@ export default function WaitlistForm({
   if (status === "done") {
     return (
       <div
-        className={`max-w-xl rounded-3xl p-6 ${
+        className={`max-w-xl rounded-xl p-6 ${
           onBlue ? "bg-white/10 ring-1 ring-white/20" : "bg-[#2546F5]/5 ring-1 ring-[#2546F5]/15"
         }`}
       >
@@ -128,7 +128,7 @@ export default function WaitlistForm({
           onBlue ? "text-[#F9D7E2]/75" : "text-neutral-400"
         }`}
       >
-        Free to join · One launch email, no spam · By joining you agree to our{" "}
+        Free to join · No spam · By joining you agree to our{" "}
         <Link
           href="/privacy"
           className={`underline underline-offset-2 ${

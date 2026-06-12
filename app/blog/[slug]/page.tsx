@@ -3,8 +3,16 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { POSTS, getPost } from "@/data/posts";
 import { meta } from "@/lib/meta";
+import {
+  JsonLd,
+  articleJsonLd,
+  breadcrumbJsonLd,
+  webPageJsonLd,
+} from "@/lib/json-ld";
 import { CONTAINER, CREAM, Arrow, RichText } from "@/components/ui";
 import { PageIntro, CtaSection } from "@/components/sections";
+
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }));
@@ -18,7 +26,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return {};
-  return meta(post.title, post.description, `/blog/${slug}`);
+  return meta(post.title, post.description, `/blog/${slug}`, {
+    openGraphType: "article",
+    publishedTime: post.date,
+  });
 }
 
 export default async function BlogPostPage({
@@ -30,24 +41,30 @@ export default async function BlogPostPage({
   const post = getPost(slug);
   if (!post) notFound();
 
+  const path = `/blog/${post.slug}`;
   const others = POSTS.filter((p) => p.slug !== post.slug).slice(0, 2);
-
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.description,
-    datePublished: post.date,
-    inLanguage: "en-GB",
-    author: { "@type": "Organization", name: "Driive" },
-    publisher: { "@type": "Organization", name: "Driive" },
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path,
+            name: post.title,
+            description: post.description,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: post.title, path },
+          ]),
+          articleJsonLd({
+            path,
+            headline: post.title,
+            description: post.description,
+            datePublished: post.date,
+          }),
+        ]}
       />
 
       <PageIntro
@@ -77,7 +94,7 @@ export default async function BlogPostPage({
               </section>
             ))}
 
-            <div className="mt-14 rounded-[2rem] p-8" style={{ backgroundColor: CREAM }}>
+            <div className="mt-14 rounded-xl p-8" style={{ backgroundColor: CREAM }}>
               <p className="text-lg font-semibold tracking-tight text-neutral-900">
                 Driive is the diary, payments and reminders system this
                 article keeps pointing at.
@@ -113,7 +130,7 @@ export default async function BlogPostPage({
               <Link
                 key={other.slug}
                 href={`/blog/${other.slug}`}
-                className="group rounded-[2rem] bg-white p-8 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)] transition hover:-translate-y-0.5"
+                className="group rounded-xl bg-white p-8 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)] transition hover:-translate-y-0.5"
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-400">
                   {other.dateLabel} · {other.readingTime}

@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { CONTAINER, CREAM } from "@/components/ui";
 import { PageIntro, LegalDoc, CtaSection } from "@/components/sections";
 
+const DESCRIPTION =
+  "How Driive protects instructor and pupil data: encryption, UK/EU hosting, access controls and responsible disclosure at security@driive.app.";
+
 export const metadata = meta(
   "Security",
-  "How Driive approaches security: encryption in transit and at rest, UK/EU data hosting, access controls and a responsible disclosure route at security@driive.app.",
+  DESCRIPTION,
   "/security",
 );
 
@@ -31,6 +35,20 @@ const COMMITMENTS = [
 export default function SecurityPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/security",
+            name: "Driive security",
+            description: DESCRIPTION,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Security", path: "/security" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Security"
         title={
@@ -50,7 +68,7 @@ export default function SecurityPage() {
             {COMMITMENTS.map((item) => (
               <div
                 key={item.title}
-                className="rounded-[2rem] p-8"
+                className="rounded-xl p-8"
                 style={{ backgroundColor: CREAM }}
               >
                 <h2 className="text-xl font-semibold tracking-tight text-neutral-900">

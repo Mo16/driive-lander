@@ -73,35 +73,233 @@ export function CtaSection({ source }: { source: string }) {
 
 /* ----------------------------------- FAQ ----------------------------------- */
 
-export type Faq = { q: string; a: ReactNode };
+export type Faq = { q: string; a: ReactNode; schemaAnswer: string };
 
 export const DEFAULT_FAQS: Faq[] = [
   {
+    q: "What is Driive?",
+    schemaAnswer:
+      "Driive is a driving instructor app for UK ADIs and PDIs. It brings diary management, pupil records, bookings, card payments, prepaid blocks, DVSA progress tracking, reminders, enquiries and accounts into one system.",
+    a: (
+      <>
+        Driive is a driving instructor app for UK ADIs and PDIs. It brings
+        your{" "}
+        <Link href="/features/smart-diary" className="font-medium text-[#2546F5] underline underline-offset-2">
+          diary
+        </Link>
+        , pupils, bookings,{" "}
+        <Link href="/features/payments" className="font-medium text-[#2546F5] underline underline-offset-2">
+          card payments
+        </Link>
+        , prepaid blocks, DVSA progress, reminders, enquiries and accounts
+        into one simple app built around how driving lessons actually work.
+      </>
+    ),
+  },
+  {
+    q: "Who is Driive built for?",
+    schemaAnswer:
+      "Driive is built for independent UK driving instructors, including ADIs and PDIs, who manage pupils, lessons, payments and progress themselves. Multi-instructor driving school tools are planned after the solo instructor launch.",
+    a: (
+      <>
+        Driive is built for independent UK driving instructors — ADIs and
+        PDIs who manage pupils, lessons, payments and progress themselves.
+        Multi-instructor{" "}
+        <Link href="/schools" className="font-medium text-[#2546F5] underline underline-offset-2">
+          driving school tools
+        </Link>{" "}
+        are planned after the solo instructor launch.
+      </>
+    ),
+  },
+  {
+    q: "What is the difference between an ADI and a PDI?",
+    schemaAnswer:
+      "An ADI is an Approved Driving Instructor who has passed all three DVSA qualifying tests and is on the ADI register. A PDI is a Potential Driving Instructor still training towards that, who may teach for payment on a trainee licence. Driive supports both — the diary, payments and progress tools work the same way.",
+    a: (
+      <>
+        An ADI is an Approved Driving Instructor — they&apos;ve passed all
+        three DVSA qualifying tests and are on the ADI register. A PDI is a
+        Potential Driving Instructor still training towards that, who may
+        teach for payment on a trainee licence. Driive supports both: the
+        diary, payments and progress tools work exactly the same way.
+      </>
+    ),
+  },
+  {
     q: "When does Driive launch?",
+    schemaAnswer:
+      "Driive is onboarding instructors in waves through 2026, starting with the waitlist in order of signup. Waitlist members receive one email when their access wave opens.",
     a: "We're onboarding instructors in waves through 2026, starting with the waitlist in order of signup. Join now and you'll get one email when it's your turn — nothing else in between.",
   },
   {
-    q: "Is Driive for solo instructors or driving schools?",
+    q: "How does Driive help with diary management?",
+    schemaAnswer:
+      "Driive helps driving instructors manage their diary by using real availability, working hours, breaks, travel time and days off. Pupils can request genuine gaps, instructors approve bookings, and lessons can sync to Google, Apple or Outlook calendars.",
     a: (
       <>
-        Driive is currently built for solo instructors as we launch. After
-        launch we'll be adding support for driving schools — shared diaries,
-        multi-instructor management and per-instructor reporting. Schools can{" "}
-        <Link href="/schools" className="font-medium text-[#2546F5] underline underline-offset-2">
-          register interest here
+        Driive helps you manage your driving instructor diary around real
+        availability: working hours, breaks, days off and travel time between
+        pick-ups. Pupils request genuine gaps, you approve each booking, and
+        lessons can sync to Google, Apple or Outlook calendars through the{" "}
+        <Link href="/features/smart-diary" className="font-medium text-[#2546F5] underline underline-offset-2">
+          smart diary
         </Link>
         .
       </>
     ),
   },
   {
-    q: "How much will it cost?",
+    q: "Can Driive replace my paper diary?",
+    schemaAnswer:
+      "Yes. Driive is designed to replace a paper diary, payment spreadsheets and reminder texts with one system. The diary, bookings, payments, progress records and accounts all update together when a lesson changes, so nothing needs copying between places.",
+    a: (
+      <>
+        Yes — that&apos;s the point. Driive replaces the paper diary, the
+        payments spreadsheet and the reminder texts with one system: when a
+        lesson changes, the diary, payments, progress record and{" "}
+        <Link href="/features/accounts" className="font-medium text-[#2546F5] underline underline-offset-2">
+          accounts
+        </Link>{" "}
+        all update together, so nothing needs copying between places.
+      </>
+    ),
+  },
+  {
+    q: "Can pupils book or request lessons through Driive?",
+    schemaAnswer:
+      "Yes. Pupils can request lessons from the available times an instructor chooses to offer. The instructor stays in control and can approve or decline each request before it appears in the diary.",
+    a: (
+      <>
+        Yes. Pupils can request lessons from the available times you choose to
+        offer. You stay in control: every booking request is approved or
+        declined by you before it appears in the diary.
+      </>
+    ),
+  },
+  {
+    q: "How do card payments and prepaid blocks work?",
+    schemaAnswer:
+      "Driive lets pupils pay by card, lets instructors send payment links, and tracks prepaid block balances to the penny. Block hours burn when lessons are completed, not when they are booked, so pupil balances stay accurate.",
+    a: (
+      <>
+        Pupils can pay by card in the app, or you can send a payment link.
+        Prepaid block balances are tracked to the penny, and hours burn when a
+        lesson is completed — not when it is booked — so balances stay right
+        in{" "}
+        <Link href="/features/payments" className="font-medium text-[#2546F5] underline underline-offset-2">
+          Payments
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
+    q: "Does Driive track DVSA progress?",
+    schemaAnswer:
+      "Yes. Driive tracks pupil progress against DVSA Ready to Pass skills. Instructors can mark skills from introduced to test-ready, record lesson debriefs, and use DL25-style mock tests to support test-readiness decisions.",
+    a: (
+      <>
+        Yes. Driive tracks pupil progress against the DVSA
+        &ldquo;Ready to Pass?&rdquo; skills. You can mark skills from introduced
+        to test-ready, add lesson debriefs and use DL25-style mock tests to
+        support test-readiness decisions. Driive is independent and not
+        affiliated with or endorsed by the DVSA.
+      </>
+    ),
+  },
+  {
+    q: "Is Driive affiliated with the DVSA?",
+    schemaAnswer:
+      "No. Driive is an independent company and is not affiliated with or endorsed by the DVSA. It tracks progress against the published DVSA syllabus and Ready to Pass guidance because that is the standard UK learners are tested to.",
+    a: (
+      <>
+        No. Driive is an independent company and is not affiliated with or
+        endorsed by the DVSA. We track{" "}
+        <Link href="/features/progress" className="font-medium text-[#2546F5] underline underline-offset-2">
+          progress
+        </Link>{" "}
+        against the published DVSA syllabus and &ldquo;Ready to Pass?&rdquo;
+        guidance because that is the standard UK learners are tested to.
+      </>
+    ),
+  },
+  {
+    q: "Does Driive send lesson reminders?",
+    schemaAnswer:
+      "Driive is designed to reduce manual reminder messages by putting lessons into pupil calendars and keeping bookings updated when times change. Reminder behaviour may vary by calendar and notification settings.",
+    a: "Driive is designed to reduce manual reminder messages by putting lessons into pupil calendars and keeping bookings updated when times change. Reminder behaviour can vary by calendar and notification settings, but the goal is simple: fewer evening texts and fewer missed lessons.",
+  },
+  {
+    q: "Can Driive help me manage new pupil enquiries?",
+    schemaAnswer:
+      "Yes. Driive includes enquiry tools for new pupil leads. A driving instructor can use a website or enquiry form to capture learner details, track enquiry status, and convert a lead into a pupil when they are ready to start lessons.",
+    a: (
+      <>
+        Yes. Driive includes{" "}
+        <Link href="/features/enquiries" className="font-medium text-[#2546F5] underline underline-offset-2">
+          enquiry tools
+        </Link>{" "}
+        for new pupil leads. You can capture learner details through your
+        website or enquiry form, track the enquiry status and convert a lead
+        into a pupil when they are ready to start.
+      </>
+    ),
+  },
+  {
+    q: "Can Driive help with accounts and tax records?",
+    schemaAnswer:
+      "Driive records lesson income, payment records, expenses, mileage and a running tax estimate for UK driving instructors. Records can be exported for an accountant or self-assessment.",
+    a: (
+      <>
+        Yes.{" "}
+        <Link href="/features/accounts" className="font-medium text-[#2546F5] underline underline-offset-2">
+          Accounts &amp; Tax
+        </Link>{" "}
+        records lesson income, payment records, expenses, mileage and a
+        running tax estimate as you teach. You can export clean records for
+        your accountant or self-assessment.
+      </>
+    ),
+  },
+  {
+    q: "Does Driive work on iPhone and Android?",
+    schemaAnswer:
+      "Yes. Driive runs on iPhone and Android, for instructors and pupils. Parents and guardians follow along through a private web link, and the instructor website at yourname.driive.app lives on the web — no download needed for either.",
+    a: (
+      <>
+        Yes. Driive runs on iPhone and Android, for instructors and pupils
+        alike. Parents and guardians follow along through a private web link,
+        and your{" "}
+        <Link href="/features/website" className="font-medium text-[#2546F5] underline underline-offset-2">
+          instructor website
+        </Link>{" "}
+        lives on the web at yourname.driive.app — no download needed for
+        either.
+      </>
+    ),
+  },
+  {
+    q: "Do my pupils need to download anything?",
+    schemaAnswer:
+      "Pupils get their own free side of Driive so they can request lessons, see their credit balance, pay by card and follow their DVSA progress. Parents and guardians can use a private read-only web link without downloading an app.",
+    a: "Pupils get their own free side of the Driive app: they request lessons, see their credit balance, pay by card and watch their DVSA progress build. Parents and guardians can follow along through a private, read-only web link — no app needed for them.",
+  },
+  {
+    q: "Can I bring my existing pupils across?",
+    schemaAnswer:
+      "Yes. Instructors can add existing pupils manually or share a join code so pupils connect from their own phone. The instructor approves each request, and early-access instructors get setup help.",
+    a: "Yes. Add pupils yourself in minutes, or share your join code and they connect from their own phone — you just approve each request. Early-access instructors get hands-on help getting set up.",
+  },
+  {
+    q: "How much does Driive cost?",
+    schemaAnswer:
+      "Driive is free for up to ten pupils. Driive Pro adds unlimited pupils, DL25-style mock tests, lesson tools and a driving instructor website for £11.99 a month or £119.90 a year.",
     a: (
       <>
         Driive is free for up to ten pupils — not a trial. Pro, which adds
         unlimited pupils, DL25-style mock tests, lesson tools and your own
-        website, is £11.99 a month or £119.90 a year. Founding instructors
-        lock in £5.99 a month (£59.90 a year) forever — the detail is on our{" "}
+        website, is £11.99 a month or £119.90 a year — the detail is on our{" "}
         <Link href="/pricing" className="font-medium text-[#2546F5] underline underline-offset-2">
           pricing page
         </Link>
@@ -110,15 +308,9 @@ export const DEFAULT_FAQS: Faq[] = [
     ),
   },
   {
-    q: "Do my pupils need to download anything?",
-    a: "Pupils get their own free side of the Driive app: they request lessons, see their credit balance, pay by card and watch their DVSA progress build. Parents and guardians can follow along through a private, read-only web link — no app needed for them.",
-  },
-  {
-    q: "Can I bring my existing pupils across?",
-    a: "Yes. Add pupils yourself in minutes, or share your join code and they connect from their own phone — you just approve each request. Early-access instructors get hands-on help getting set up.",
-  },
-  {
     q: "Is my data safe?",
+    schemaAnswer:
+      "Driive encrypts data in transit and at rest, hosts data in UK/EU regions, handles personal data under UK GDPR, and does not sell personal data.",
     a: (
       <>
         Your data is encrypted in transit and at rest, hosted in the UK/EU,
@@ -133,17 +325,22 @@ export const DEFAULT_FAQS: Faq[] = [
   },
   {
     q: "Can I export my data?",
+    schemaAnswer:
+      "Yes. Instructors can export pupils, lessons, payment records and progress history. The data belongs to the instructor's business, and UK GDPR rights also apply to personal data.",
     a: "Yes. Your pupils, lessons, payment records and progress history are yours, and you can export them whenever you like — there's no lock-in, and you take everything with you if you ever leave. Under UK GDPR you also have the right to request a full copy of your personal data at any time.",
   },
   {
     q: "Am I locked into a contract?",
+    schemaAnswer:
+      "No. Driive Pro is available monthly or annually and can be cancelled any time. Cancelling returns the account to the free plan, and pupil, lesson and payment records remain exportable.",
     a: "No. Pro is monthly or annual and you can cancel any time — you simply drop back to the free plan, and your pupils, lessons and payment records stay yours, exportable whenever you like.",
   },
-  {
-    q: "Does Driive follow the DVSA syllabus?",
-    a: "Progress tracking is structured around the official DVSA 'Ready to Pass?' skills, so test-readiness is based on evidence. Driive is independent and not affiliated with or endorsed by the DVSA.",
-  },
 ];
+
+export const DEFAULT_FAQ_SCHEMA = DEFAULT_FAQS.map((faq) => ({
+  question: faq.q,
+  answer: faq.schemaAnswer,
+}));
 
 export function FaqSection({
   faqs = DEFAULT_FAQS,
@@ -202,7 +399,7 @@ export function FeatureLinkGrid({ tone = "light" }: { tone?: "light" | "blue" })
         <Link
           key={feature.slug}
           href={`/features/${feature.slug}`}
-          className={`group rounded-3xl p-7 transition ${
+          className={`group rounded-xl p-7 transition ${
             onBlue
               ? "bg-white/10 ring-1 ring-white/15 hover:bg-white/15"
               : "bg-white shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)] hover:-translate-y-0.5"

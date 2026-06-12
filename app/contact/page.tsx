@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { CONTAINER, CREAM, Eyebrow, Road } from "@/components/ui";
 import { PageIntro, CtaSection } from "@/components/sections";
 
+const DESCRIPTION =
+  "Contact Driive for product questions, support, privacy requests or responsible security disclosure. We reply within two working days.";
+
 export const metadata = meta(
   "Contact",
-  "Get in touch with the Driive team. General enquiries, support, privacy and security contacts — we reply within two working days.",
+  DESCRIPTION,
   "/contact",
 );
 
@@ -35,6 +39,21 @@ const CONTACTS = [
 export default function ContactPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/contact",
+            name: "Contact Driive",
+            description: DESCRIPTION,
+            type: "ContactPage",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Contact"
         title={
@@ -54,7 +73,7 @@ export default function ContactPage() {
               <a
                 key={contact.email}
                 href={`mailto:${contact.email}`}
-                className="group rounded-[2rem] p-8 transition hover:-translate-y-0.5"
+                className="group rounded-xl p-8 transition hover:-translate-y-0.5"
                 style={{ backgroundColor: CREAM }}
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-400">

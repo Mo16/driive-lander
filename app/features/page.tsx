@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { CONTAINER, CREAM, Eyebrow, Road } from "@/components/ui";
 import {
   PageIntro,
@@ -8,15 +9,33 @@ import {
   FaqSection,
 } from "@/components/sections";
 
+const DESCRIPTION =
+  "Explore Driive features for UK driving instructors: smart diary, pupil hub, card payments, prepaid blocks, DVSA progress, mock tests, accounts and enquiry tools.";
+
 export const metadata = meta(
   "Features",
-  "Everything a UK driving instructor needs in one place: smart diary, pupil hub, payments, DVSA progress tracking, mock tests, accounts, your own website and enquiries.",
+  DESCRIPTION,
   "/features",
 );
 
 export default function FeaturesPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/features",
+            name: "Driive features",
+            description: DESCRIPTION,
+            type: "CollectionPage",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Features", path: "/features" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Features"
         title={

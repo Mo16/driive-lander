@@ -1,45 +1,80 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
+import { JsonLd, organizationJsonLd, webSiteJsonLd } from "@/lib/json-ld";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  SEO_KEYWORDS,
+  SITE_NAME,
+  SITE_URL,
+  SOCIAL_IMAGE,
+  SOCIAL_IMAGE_ALT,
+  SOCIAL_IMAGE_HEIGHT,
+  SOCIAL_IMAGE_WIDTH,
+} from "@/lib/site";
+import { BLUE } from "@/lib/brand";
 import "./globals.css";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://driive.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Driive — Run your whole driving school from one app",
+    default: DEFAULT_TITLE,
     template: "%s · Driive",
   },
-  description:
-    "Diary, pupils, card payments, prepaid blocks, DVSA progress, mock tests and your books — the all-in-one app for UK driving instructors.",
-  applicationName: "Driive",
-  openGraph: {
-    siteName: "Driive",
-    type: "website",
-    title: "Driive — Run your whole driving school from one app",
-    description:
-      "Diary, payments, DVSA progress tracking, mock tests and accounts for UK driving instructors.",
-    url: SITE_URL,
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  category: "Business software",
+  creator: SITE_NAME,
+  keywords: SEO_KEYWORDS,
+  publisher: SITE_NAME,
+  alternates: { canonical: "/" },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },
-  twitter: { card: "summary_large_image", site: "@driiveapp" },
-  robots: { index: true, follow: true },
+  manifest: "/manifest.webmanifest",
+  openGraph: {
+    siteName: SITE_NAME,
+    type: "website",
+    locale: "en_GB",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: SITE_URL,
+    images: [
+      {
+        url: SOCIAL_IMAGE,
+        width: SOCIAL_IMAGE_WIDTH,
+        height: SOCIAL_IMAGE_HEIGHT,
+        alt: SOCIAL_IMAGE_ALT,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@driiveapp",
+    creator: "@driiveapp",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [SOCIAL_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Driive",
-  url: SITE_URL,
-  logo: `${SITE_URL}/icon.svg`,
-  sameAs: ["https://x.com/driiveapp"],
-  contactPoint: {
-    "@type": "ContactPoint",
-    email: "hello@driive.app",
-    contactType: "customer support",
-    areaServed: "GB",
-  },
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: BLUE,
 };
 
 export default function RootLayout({
@@ -52,10 +87,7 @@ export default function RootLayout({
       <body
         className={`${GeistSans.className} bg-white text-neutral-900 antialiased`}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+        <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
         <Nav />
         {children}
         <Footer />

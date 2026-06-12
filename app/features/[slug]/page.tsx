@@ -1,14 +1,29 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { FEATURES, getFeature } from "@/data/features";
+import { FEATURES, featureFaqSchema, getFeature } from "@/data/features";
 import { FEATURE_VISUALS } from "@/app/feature-showcase";
 import { meta } from "@/lib/meta";
+import {
+  JsonLd,
+  breadcrumbJsonLd,
+  faqPageJsonLd,
+  softwareApplicationJsonLd,
+  webPageJsonLd,
+} from "@/lib/json-ld";
 import { CONTAINER, CREAM, Eyebrow, Road, Check, RichText } from "@/components/ui";
-import { PageIntro, CtaSection } from "@/components/sections";
+import { PageIntro, CtaSection, FaqSection, type Faq } from "@/components/sections";
+
+export const dynamicParams = false;
+
+/** Features with a bespoke page under app/features/<slug>/ — excluded here
+    so the static route owns the URL. Each redesigned feature moves across. */
+const BESPOKE = ["smart-diary"];
 
 export function generateStaticParams() {
-  return FEATURES.map((feature) => ({ slug: feature.slug }));
+  return FEATURES.filter((feature) => !BESPOKE.includes(feature.slug)).map(
+    (feature) => ({ slug: feature.slug }),
+  );
 }
 
 export async function generateMetadata({
@@ -32,12 +47,41 @@ export default async function FeaturePage({
   if (!feature) notFound();
 
   const visual = FEATURE_VISUALS[feature.slug];
+  const path = `/features/${feature.slug}`;
   const others = feature.related
     .map((relatedSlug) => getFeature(relatedSlug))
     .filter((f): f is NonNullable<typeof f> => Boolean(f));
+  const faqSchema = featureFaqSchema(feature);
+  const faqs: Faq[] = feature.faqs.map((faq, index) => ({
+    q: faq.q,
+    a: <RichText text={faq.a} />,
+    schemaAnswer: faqSchema[index].answer,
+  }));
 
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path,
+            name: `${feature.name} by Driive`,
+            description: feature.metaDescription,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Features", path: "/features" },
+            { name: feature.name, path },
+          ]),
+          softwareApplicationJsonLd({
+            name: `Driive ${feature.name}`,
+            description: feature.metaDescription,
+            path,
+            featureList: feature.benefits.map((benefit) => benefit.title),
+          }),
+          faqPageJsonLd(faqSchema),
+        ]}
+      />
+
       <PageIntro
         eyebrow={feature.name}
         title={feature.tagline}
@@ -48,7 +92,7 @@ export default async function FeaturePage({
       <section className="bg-white pb-8 pt-20 lg:pt-28">
         <div className={CONTAINER}>
           <div
-            className="mx-auto max-w-4xl rounded-[2.5rem] p-7 sm:p-10"
+            className="mx-auto max-w-4xl rounded-xl p-7 sm:p-10"
             style={{ backgroundColor: CREAM }}
           >
             <div className="min-h-[340px]">{visual}</div>
@@ -82,6 +126,8 @@ export default async function FeaturePage({
         </div>
       </section>
 
+      <FaqSection faqs={faqs} />
+
       <Road from="#FFFFFF" to={CREAM} />
 
       {/* Related features */}
@@ -96,7 +142,7 @@ export default async function FeaturePage({
               <Link
                 key={other.slug}
                 href={`/features/${other.slug}`}
-                className="group rounded-3xl bg-white p-7 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)] transition hover:-translate-y-0.5"
+                className="group rounded-xl bg-white p-7 shadow-[0_25px_60px_-35px_rgba(12,12,14,0.25)] transition hover:-translate-y-0.5"
               >
                 <p className="text-lg font-semibold tracking-tight text-neutral-900">
                   {other.name}

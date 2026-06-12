@@ -1,14 +1,12 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { BLUE, CREAM, INK, PINK } from "@/lib/brand";
 
 /* ----------------------------- design tokens ------------------------------
    See CLAUDE.md. Import these everywhere — never hardcode new hexes.
 --------------------------------------------------------------------------- */
 
-export const BLUE = "#2546F5";
-export const PINK = "#F9D7E2";
-export const CREAM = "#F0EEE7";
-export const INK = "#0C0C0E";
+export { BLUE, CREAM, INK, PINK };
 
 export const CONTAINER = "mx-auto w-full max-w-[1380px] px-6 lg:px-12";
 
@@ -104,31 +102,30 @@ export function Logo({ variant = "dark" }: { variant?: "dark" | "light" }) {
 
 /* --------------------------------- shapes --------------------------------- */
 
-/* Section divider styled as a stretch of road: the section above (`from`) meets
-   the section below (`to`) at the centre, with a dashed lane line running along
-   the seam — on-theme for a driving app and visible on every section colour. */
+/* Section divider: the section below (`to`) rises into the section above
+   (`from`) as one gentle arc — a single soft crest, no repetition. It only
+   ever uses the two section colours it joins (blue ↔ pink ↔ cream), so every
+   transition reads as one seamless surface — no extra inks. */
 export function Road({ from, to }: { from: string; to: string }) {
   return (
     <div
       aria-hidden
-      className="relative h-16 w-full overflow-hidden sm:h-24"
+      className="-mt-px h-16 w-full sm:h-24"
       style={{ backgroundColor: from }}
     >
-      {/* lower lane — the next section's colour */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-1/2"
-        style={{ backgroundColor: to }}
-      />
-      {/* dashed centre line along the seam */}
-      <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 items-center gap-5 sm:gap-7">
-        {Array.from({ length: 40 }).map((_, i) => (
-          <span
-            key={i}
-            className="h-1.5 w-10 shrink-0 rounded-full opacity-90 sm:h-2 sm:w-16"
-            style={{ backgroundColor: INK }}
-          />
-        ))}
-      </div>
+      {/* 1px taller than the strip so the antialiased bottom edge lands on the
+          next section's matching colour — kills the hairline seam at zoom/DPI
+          levels where the boundary falls mid-pixel. */}
+      <svg
+        className="h-[calc(100%+1px)] w-full"
+        viewBox="0 0 1440 96"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0 80 Q720 8 1440 80 V96 H0 Z"
+          fill={to}
+        />
+      </svg>
     </div>
   );
 }
@@ -172,7 +169,7 @@ export function Eyebrow({
 }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full border-2 border-dashed px-4 py-1.5 text-sm font-medium ${
+      className={`inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium ${
         tone === "blue"
           ? "border-[#2546F5]/30 text-[#2546F5]"
           : "border-white/30 text-[#F9D7E2]"

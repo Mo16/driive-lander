@@ -45,7 +45,7 @@ Plus `sitemap.xml`, `robots.txt`, branded 404, and JSON-LD (Organization, Softwa
 
 ## Waitlist API
 
-`POST /api/waitlist` with `{ email, company, source }`. `company` is a honeypot — bots fill it, humans never see it. Valid signups are upserted to Supabase (deduped on email) and a notification is sent via Resend. Both integrations are optional and activate only when their env keys exist.
+`POST /api/waitlist` with `{ email, company, source }`. `company` is a honeypot — bots fill it, humans never see it. Valid signups are upserted to Supabase (deduped on email), then Resend sends a confirmation email to the signer-up (first signup only — duplicates are not re-emailed) and a notification to `WAITLIST_NOTIFY_EMAIL`. Both integrations are optional and activate only when their env keys exist.
 
 ### Supabase table
 
@@ -67,6 +67,7 @@ create table if not exists waitlist (
 | `SUPABASE_SERVICE_ROLE_KEY` | Service role key (server-only, never exposed) |
 | `RESEND_API_KEY` | Resend API key |
 | `RESEND_FROM` | From address, e.g. `Driive <waitlist@driive.app>` |
+| `RESEND_SEGMENT_ID` | Resend segment that every signup is added to as a contact |
 | `WAITLIST_NOTIFY_EMAIL` | Inbox that receives signup notifications |
 
 ## Before going live

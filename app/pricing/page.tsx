@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { CONTAINER, CREAM, PINK, Eyebrow, Road } from "@/components/ui";
 import { PageIntro, CtaSection, FaqSection, type Faq } from "@/components/sections";
 import PricingPlans from "@/components/pricing-plans";
 
+const DESCRIPTION =
+  "Driive pricing for UK driving instructors: free for up to ten pupils, with Pro for unlimited pupils, mock tests, lesson tools and your own website.";
+
 export const metadata = meta(
   "Pricing",
-  "Driive is free for up to ten pupils — diary, payments, blocks, progress and accounts included. Pro adds unlimited pupils, mock tests, lesson tools and your own website for £11.99 a month — founding instructors lock in £5.99 forever.",
+  DESCRIPTION,
   "/pricing",
 );
 
@@ -17,7 +21,7 @@ const PRINCIPLES = [
   },
   {
     title: "One Pro plan",
-    body: "£11.99 a month, or £119.90 a year — two months free. Founding instructors lock in £5.99 a month (£59.90 a year) forever. Unlimited pupils and the premium teaching tools. No add-ons, no surprises three months in.",
+    body: "£11.99 a month, or £119.90 a year — two months free. Unlimited pupils and the premium teaching tools. No add-ons, no surprises three months in.",
   },
   {
     title: "Cancel any time",
@@ -28,6 +32,8 @@ const PRINCIPLES = [
 const PRICING_FAQS: Faq[] = [
   {
     q: "What does the free plan include?",
+    schemaAnswer:
+      "The free plan includes diary and booking requests, card payments with next-day payouts, prepaid blocks, DVSA progress tracking, the enquiries inbox and accounts for up to ten active pupils. Learners who have passed or been archived do not count towards the limit.",
     a: (
       <>
         The whole core toolkit:{" "}
@@ -53,6 +59,8 @@ const PRICING_FAQS: Faq[] = [
   },
   {
     q: "What does Pro add?",
+    schemaAnswer:
+      "Driive Pro adds unlimited pupils, DL25-style mock tests, route sketches over a live map, lesson resources pupils can keep, and a driving instructor website at yourname.driive.app with a built-in enquiry form.",
     a: (
       <>
         Unlimited pupils, plus the premium teaching tools:{" "}
@@ -70,22 +78,26 @@ const PRICING_FAQS: Faq[] = [
   },
   {
     q: "Are card processing fees included?",
-    a: "Card payments carry a 5% fee per transaction, which covers card processing and next-day payouts to your bank. Recording a cash or bank-transfer payment is free. There are no per-pupil or per-booking fees on top.",
+    schemaAnswer:
+      "Card payments carry a 3.5% fee per transaction on Free and 1.5% on Pro, covering card processing and next-day payouts. Recording cash or bank-transfer payments is free, and there are no extra per-pupil or per-booking fees.",
+    a: "Card payments carry a 3.5% fee per transaction on Free — just 1.5% on Pro — which covers card processing and next-day payouts to your bank. Recording a cash or bank-transfer payment is free. There are no per-pupil or per-booking fees on top.",
   },
   {
     q: "How do I pay for Pro?",
+    schemaAnswer:
+      "Instructors can pay for Driive Pro in the app through the App Store or Google Play, or by card on the web. Subscriptions are managed wherever they were purchased, and the annual plan works out at two months free.",
     a: "In the app through the App Store or Google Play, or by card on the web — whichever suits you. You manage the subscription wherever you bought it, and the annual plan works out at two months free.",
   },
   {
     q: "Do my pupils pay anything?",
+    schemaAnswer:
+      "No. Pupils use their side of Driive for free and only pay for their lessons. There is no pupil app fee and no booking fee added on top.",
     a: "No. Pupils use their side of Driive for free and just pay for their lessons — there is no app for them to buy and no booking fee added on top.",
   },
   {
-    q: "What does 'founding instructor' mean?",
-    a: "Instructors who join from the waitlist get access in the first waves, direct input into the roadmap, and the founding price — Pro at £5.99 a month or £59.90 a year, locked in forever rather than the standard £11.99 and £119.90.",
-  },
-  {
     q: "Will school pricing be different?",
+    schemaAnswer:
+      "Yes. Multi-instructor school accounts will launch later with separate pricing. Driving schools can register interest on the For driving schools page.",
     a: (
       <>
         Yes. Multi-instructor school accounts launch later with their own
@@ -99,9 +111,29 @@ const PRICING_FAQS: Faq[] = [
   },
 ];
 
+const PRICING_FAQ_SCHEMA = PRICING_FAQS.map((faq) => ({
+  question: faq.q,
+  answer: faq.schemaAnswer,
+}));
+
 export default function PricingPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/pricing",
+            name: "Driive pricing",
+            description: DESCRIPTION,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Pricing", path: "/pricing" },
+          ]),
+          faqPageJsonLd(PRICING_FAQ_SCHEMA),
+        ]}
+      />
+
       <PageIntro
         eyebrow="Pricing"
         title={
@@ -119,10 +151,10 @@ export default function PricingPage() {
         <div className={CONTAINER}>
           <PricingPlans />
           <p className="mt-8 max-w-2xl text-sm leading-relaxed text-neutral-400">
-            Card payments carry a 5% per-transaction fee covering processing
-            and next-day payouts. Recording cash or bank-transfer payments is
-            free. Pro is available monthly or annually, in the app or on the
-            web, and you can cancel any time.
+            Card payments carry a 3.5% per-transaction fee on Free — 1.5% on
+            Pro — covering processing and next-day payouts. Recording cash or
+            bank-transfer payments is free. Pro is available monthly or
+            annually, in the app or on the web, and you can cancel any time.
           </p>
         </div>
       </section>
@@ -140,7 +172,7 @@ export default function PricingPage() {
           </h2>
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
             {PRINCIPLES.map((item) => (
-              <div key={item.title} className="rounded-[2rem] bg-white p-8">
+              <div key={item.title} className="rounded-xl bg-white p-8">
                 <h3 className="text-xl font-semibold tracking-tight text-neutral-900">
                   {item.title}
                 </h3>
@@ -154,28 +186,6 @@ export default function PricingPage() {
       </section>
 
       <Road from={PINK} to="#FFFFFF" />
-
-      {/* Founding offer note */}
-      <section className="bg-white py-20 lg:py-28">
-        <div className={CONTAINER}>
-          <div
-            className="rounded-[2.5rem] px-8 py-12 sm:px-12 lg:px-16"
-            style={{ backgroundColor: "#0C0C0E" }}
-          >
-            <Eyebrow tone="light">Founding instructors</Eyebrow>
-            <h2 className="mt-8 max-w-3xl text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-white">
-              The waitlist is the best deal Driive will ever offer.
-            </h2>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-400">
-              Founding instructors get first access, a direct line to the team
-              building the product, and Pro at £5.99 a month or £59.90 a year
-              — locked in forever, not an introductory rate. Full details land
-              in your inbox before launch — no payment is taken on the
-              waitlist.
-            </p>
-          </div>
-        </div>
-      </section>
 
       <FaqSection faqs={PRICING_FAQS} background={CREAM} />
 

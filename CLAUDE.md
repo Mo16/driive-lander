@@ -46,7 +46,7 @@ Selection colour is pink/blue (set in globals.css). Never use default Tailwind b
 
 - Container: `mx-auto w-full max-w-[1380px] px-6 lg:px-12` (exported as `CONTAINER`).
 - Section rhythm: `py-24 lg:py-32` (hero/pricing larger). Sections alternate full-bleed background colours: blue → pink → white card → cream → dark.
-- Radius scale: cards `rounded-[2rem]`–`rounded-[2.5rem]`, inner tiles `rounded-xl`/`rounded-2xl`, buttons + pills always `rounded-full`. Phone frames `rounded-[3rem] border-[10px] border-neutral-950`.
+- Radius scale: ALL boxes (cards, panels, inner tiles) use `rounded-xl`. Buttons + pills always `rounded-full`. Phone frames keep device corners: `rounded-[3rem] border-[10px] border-neutral-950`.
 - Section transitions between colour blocks use the `<Wave from to />` SVG divider — never straight gradients, never diagonal clips.
 
 ### Recurring components (reuse, never re-implement)

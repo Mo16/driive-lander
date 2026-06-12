@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { meta } from "@/lib/meta";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld";
 import { CONTAINER, CREAM, PINK, Eyebrow, Road, Check } from "@/components/ui";
 import {
   PageIntro,
@@ -9,9 +10,12 @@ import {
   FaqSection,
 } from "@/components/sections";
 
+const DESCRIPTION =
+  "Driving instructor software for UK ADIs and PDIs: manage your diary, pupils, card payments, prepaid blocks, DVSA progress, mock tests and accounts in one app.";
+
 export const metadata = meta(
   "For driving instructors",
-  "Driive is built for independent UK driving instructors: a smart diary, card payments and prepaid blocks, DVSA progress tracking, mock tests and your books — without the admin.",
+  DESCRIPTION,
   "/instructors",
 );
 
@@ -36,6 +40,20 @@ const DAY: { time: string; before: string; after: string }[] = [
 export default function InstructorsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            path: "/instructors",
+            name: "Driive for driving instructors",
+            description: DESCRIPTION,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "For driving instructors", path: "/instructors" },
+          ]),
+        ]}
+      />
+
       <PageIntro
         eyebrow="For driving instructors"
         title={
@@ -61,7 +79,7 @@ export default function InstructorsPage() {
             {DAY.map((row) => (
               <div
                 key={row.time}
-                className="grid gap-4 rounded-[2rem] p-7 sm:p-8 lg:grid-cols-[160px_1fr_1fr] lg:items-center lg:gap-10"
+                className="grid gap-4 rounded-xl p-7 sm:p-8 lg:grid-cols-[160px_1fr_1fr] lg:items-center lg:gap-10"
                 style={{ backgroundColor: CREAM }}
               >
                 <p className="text-lg font-semibold tracking-tight text-neutral-900">
