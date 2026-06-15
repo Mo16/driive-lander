@@ -30,6 +30,7 @@ The design language is flat, bold, editorial SaaS (Weav-style). It is NOT glassm
 | PINK  | `#F9D7E2` | Headlines/text on blue, soft badges, secondary buttons |
 | CREAM | `#F0EEE7` | Neutral section backgrounds, visual panels |
 | INK   | `#0C0C0E` | Dark sections, device frames |
+| COAL  | `#262320` | Warm dark surface — the CTA + footer block |
 | White / neutral-900/600/500/400/200/100 | Tailwind | Body text and surfaces |
 
 Selection colour is pink/blue (set in globals.css). Never use default Tailwind blues, purples, or gradient text.

@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { BLUE, CREAM, INK, PINK } from "@/lib/brand";
+import { BLUE, CREAM, COAL, INK, PINK } from "@/lib/brand";
 
 /* ----------------------------- design tokens ------------------------------
    See CLAUDE.md. Import these everywhere — never hardcode new hexes.
 --------------------------------------------------------------------------- */
 
-export { BLUE, CREAM, INK, PINK };
+export { BLUE, CREAM, COAL, INK, PINK };
 
 export const CONTAINER = "mx-auto w-full max-w-[1380px] px-6 lg:px-12";
 
@@ -80,20 +80,25 @@ export function LogoMark({
   );
 }
 
-export function Logo({ variant = "dark" }: { variant?: "dark" | "light" }) {
-  const dark = variant === "dark";
+export function Logo({
+  variant = "dark",
+}: {
+  /** "dark" = ink tile on light surfaces · "light" = pink tile on blue ·
+      "onDark" = white tile + blue road on dark (coal/ink) surfaces */
+  variant?: "dark" | "light" | "onDark";
+}) {
+  const tile = variant === "dark" ? INK : variant === "onDark" ? "#FFFFFF" : PINK;
+  const road = variant === "dark" ? "#FFFFFF" : BLUE;
+  const wordmark =
+    variant === "dark"
+      ? "text-neutral-900"
+      : variant === "onDark"
+        ? "text-white"
+        : "text-[#F9D7E2]";
   return (
     <Link href="/" className="inline-flex items-center gap-2.5">
-      <LogoMark
-        tile={dark ? INK : PINK}
-        road={dark ? "#FFFFFF" : BLUE}
-        className="h-8 w-8"
-      />
-      <span
-        className={`text-2xl font-semibold  tracking-tight ${
-          dark ? "text-neutral-900" : "text-[#F9D7E2]"
-        }`}
-      >
+      <LogoMark tile={tile} road={road} className="h-8 w-8" />
+      <span className={`text-2xl font-semibold  tracking-tight ${wordmark}`}>
         Driive
       </span>
     </Link>
@@ -163,18 +168,26 @@ export function RichText({
 export function Eyebrow({
   children,
   tone = "blue",
+  mark = false,
 }: {
   children: ReactNode;
   tone?: "blue" | "light";
+  mark?: boolean;
 }) {
+  const light = tone === "light";
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium ${
-        tone === "blue"
-          ? "border-[#2546F5]/30 text-[#2546F5]"
-          : "border-white/30 text-[#F9D7E2]"
-      }`}
+      className={`inline-flex items-center gap-2 rounded-full py-1.5 text-sm font-medium ${
+        mark ? "pl-1.5 pr-4" : "px-4"
+      } ${light ? "bg-white/12 text-white/80" : "bg-[#2546F5]/[0.07] text-[#2546F5]"}`}
     >
+      {mark && (
+        <LogoMark
+          tile={light ? "rgba(255,255,255,0.22)" : "rgba(37,70,245,0.14)"}
+          road={light ? "#FFFFFF" : BLUE}
+          className="h-5 w-5"
+        />
+      )}
       {children}
     </span>
   );

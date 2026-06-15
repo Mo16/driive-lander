@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo, CONTAINER } from "./ui";
+import { Logo, CONTAINER, COAL } from "./ui";
 import { FEATURES } from "@/data/features";
 
 const COLUMNS: { title: string; links: { name: string; href: string; soon?: boolean }[] }[] = [
@@ -14,6 +14,7 @@ const COLUMNS: { title: string; links: { name: string; href: string; soon?: bool
     title: "Solutions",
     links: [
       { name: "For driving instructors", href: "/instructors" },
+      { name: "For learner drivers", href: "/learners" },
       { name: "For driving schools", href: "/schools", soon: true },
       { name: "Pricing", href: "/pricing" },
       { name: "Join the waitlist", href: "/waitlist" },
@@ -34,32 +35,33 @@ const COLUMNS: { title: string; links: { name: string; href: string; soon?: bool
       { name: "Privacy Policy", href: "/privacy" },
       { name: "Terms of Service", href: "/terms" },
       { name: "Cookie Policy", href: "/cookies" },
+      { name: "Delete Account", href: "/delete-account" },
     ],
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-white pb-12 pt-10">
+    <footer className="pb-12 pt-4" style={{ backgroundColor: COAL }}>
       <div className={CONTAINER}>
-        <div className="grid gap-12 border-t border-neutral-200 pt-14 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 border-t border-white/10 pt-14 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr]">
           <div>
-            <Logo variant="dark" />
-            <p className="mt-5 max-w-xs text-[15px] leading-relaxed text-neutral-500">
+            <Logo variant="onDark" />
+            <p className="mt-5 max-w-xs text-[15px] leading-relaxed text-neutral-400">
               The booking, payments and progress platform for UK driving
               instructors.
             </p>
-            <p className="mt-5 text-[15px] text-neutral-500">@driiveapp</p>
+            <p className="mt-5 text-[15px] text-neutral-400">@driiveapp</p>
           </div>
           {COLUMNS.map((column) => (
             <div key={column.title}>
-              <p className="font-semibold">{column.title}</p>
-              <ul className="mt-5 space-y-3 text-[15px] text-neutral-500">
+              <p className="font-semibold text-white">{column.title}</p>
+              <ul className="mt-5 space-y-3 text-[15px] text-neutral-400">
                 {column.links.map((link) => (
                   <li key={link.href + link.name}>
                     <Link
                       href={link.href}
-                      className="transition hover:text-neutral-900"
+                      className="transition hover:text-white"
                     >
                       {link.name}
                       {link.soon && (
@@ -75,7 +77,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-16 border-t border-neutral-200 pt-8 text-[13px] leading-relaxed text-neutral-400">
+        <div className="mt-16 border-t border-white/10 pt-8 text-[13px] leading-relaxed text-neutral-500">
           <p>
             © 2026 Driive. Driive is a trading name of Aurelo Web Studio Ltd,
             a company registered in England and Wales (Company No. 16930106).

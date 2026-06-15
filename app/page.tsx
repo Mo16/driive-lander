@@ -202,7 +202,7 @@ function Mission() {
         <div className="h-2" style={{ backgroundColor: PINK }} />
       </div>
       <div className={CONTAINER}>
-        <Eyebrow>Driive · The one app you&apos;ve been searching for</Eyebrow>
+        <Eyebrow mark>Driive · The one app you&apos;ve been searching for</Eyebrow>
         <p className="mt-10 max-w-5xl text-[clamp(1.8rem,3.6vw,3.3rem)] font-medium leading-snug tracking-[-0.02em] text-[#2546F5]">
           One app for your diary, payments and pupil progress. Approve
           bookings in a tap, get paid without chasing, and know exactly where

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { BLUE, CONTAINER, Arrow, Eyebrow, Road } from "./ui";
+import { BLUE, COAL, CONTAINER, Arrow, Eyebrow, Road } from "./ui";
 import WaitlistForm from "./waitlist-form";
 import { FEATURES } from "@/data/features";
 
@@ -52,14 +52,14 @@ export function PageIntro({
 
 export function CtaSection({ source }: { source: string }) {
   return (
-    <section className="py-24 lg:py-32" style={{ backgroundColor: BLUE }}>
+    <section className="rounded-t-[2.5rem] py-24 lg:py-32" style={{ backgroundColor: COAL }}>
       <div className={CONTAINER}>
-        <h2 className="max-w-3xl text-[clamp(2.4rem,5vw,4.5rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[#F9D7E2]">
+        <h2 className="max-w-3xl text-[clamp(2.4rem,5vw,4.5rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[#F0EEE7]">
           Put your diary
           <br />
           on autopilot.
         </h2>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#F9D7E2]/90">
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-neutral-400">
           Access opens in waves from the waitlist — founding instructors get
           in first.
         </p>
@@ -68,6 +68,44 @@ export function CtaSection({ source }: { source: string }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ------------------------------- feature card -----------------------------
+   A floating product mockup centred on top, then a centred label / headline /
+   note below. Used for the "two featured cards" blocks (smart-diary, progress).
+--------------------------------------------------------------------------- */
+
+export function FeatureCard({
+  label,
+  value,
+  note,
+  className = "",
+  children,
+}: {
+  label: string;
+  value: string;
+  note: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className={`flex flex-col overflow-hidden rounded-xl ${className}`}>
+      <div className="flex min-h-72 flex-1 items-center justify-center p-10 sm:min-h-104 sm:p-16">
+        {children}
+      </div>
+      <div className="px-8 pb-12 text-center">
+        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">
+          {label}
+        </p>
+        <p className="mt-2 text-2xl font-semibold tracking-tight text-[#2546F5]">
+          {value}
+        </p>
+        <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-neutral-500">
+          {note}
+        </p>
+      </div>
+    </div>
   );
 }
 

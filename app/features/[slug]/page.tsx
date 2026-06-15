@@ -18,7 +18,7 @@ export const dynamicParams = false;
 
 /** Features with a bespoke page under app/features/<slug>/ — excluded here
     so the static route owns the URL. Each redesigned feature moves across. */
-const BESPOKE = ["smart-diary"];
+const BESPOKE = ["smart-diary", "pupil-hub", "payments", "progress"];
 
 export function generateStaticParams() {
   return FEATURES.filter((feature) => !BESPOKE.includes(feature.slug)).map(

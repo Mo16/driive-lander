@@ -20,7 +20,7 @@ export const FEATURES: Feature[] = [
     slug: "smart-diary",
     name: "Smart Diary",
     tagline: "Your week, sorted before it starts.",
-    lede: "Day, week and month views built on your real working pattern — pupils request the gaps you actually have, cancelled slots are re-offered in one tap, and every lesson lands in the calendar you already use.",
+    lede: "Manage lesson bookings, pupil details, payments and free gaps from one diary for instructors. Driive helps you organise your week, track paid and unpaid lessons, and keep your driving school running without paper diaries or messy calendar apps.",
     metaTitle: "Smart Diary — Driving instructor diary & booking app",
     metaDescription:
       "The driving instructor diary that fills itself. Pupils request your real gaps, cancelled slots are re-offered in one tap, and every lesson syncs to Google, Apple and Outlook Calendar.",
@@ -70,10 +70,10 @@ export const FEATURES: Feature[] = [
     slug: "pupil-hub",
     name: "Pupil Hub",
     tagline: "Every learner, one profile.",
-    lede: "Contact details, lesson history, credit balance, notes and test dates in one place — no more scrolling through texts to find anything.",
-    metaTitle: "Pupil Hub — Pupil management for driving instructors",
+    lede: "Pupil management built for driving instructors: contact details, lesson history, credit balance, notes and theory and practical test dates in one profile — no more scrolling back through texts to find anything.",
+    metaTitle: "Pupil Hub — Pupil management software for driving instructors",
     metaDescription:
-      "One profile per pupil: contact details, lesson history, notes, credit balances and test dates. Pupil management software built for UK driving instructors.",
+      "Keep every learner in one profile: contact details, lesson history, private notes, credit balances and test dates. Pupil management software and records built for UK driving instructors and ADIs.",
     benefits: [
       {
         title: "The full picture in one tap",
@@ -91,15 +91,43 @@ export const FEATURES: Feature[] = [
     faqs: [
       {
         q: "How do driving instructors keep pupil records?",
-        a: "Driive gives every learner one profile holding contact details, lesson history, credit balance, notes and theory and practical test dates — so nothing lives in a scrolled-back text thread. [Progress](/features/progress) and [payments](/features/payments) update the record automatically as you teach.",
+        a: "Driive gives every learner one profile holding contact details, lesson history, credit balance, private notes and their theory and practical test dates — so nothing lives in a scrolled-back text thread or a paper diary. [Progress](/features/progress) and [payments](/features/payments) write back to the record automatically as you teach, so it is always current without you topping up a spreadsheet.",
+      },
+      {
+        q: "What is the best way to manage pupils as a driving instructor?",
+        a: "The pupils who slip through the cracks are usually the ones whose details are scattered across texts, a paper diary and a payments spreadsheet. The reliable way is to keep one record per learner — lessons, credit, notes and test dates together — that updates itself from the work you already do. Driive's Pupil Hub does exactly that, with a searchable list, a 'Follow up today' prompt for who owes you or tests soon, and message and call buttons on every row so the next step is one tap away.",
       },
       {
         q: "How do pupils join an instructor on Driive?",
-        a: "The instructor shares a join code; the pupil enters it in their own app and the instructor approves the request. Instructors can also add existing pupils themselves in minutes and invite them to connect later.",
+        a: "The instructor shares a personal join code; the pupil enters it in their own free side of the app, fills in their name, transmission and pick-up details, and the instructor approves the request. From that moment the pupil has their lessons, [credit balance](/features/payments) and [progress](/features/progress), and the instructor has a clean record — no manual typing of contact details.",
+      },
+      {
+        q: "Can I bring my existing pupils across to a new app?",
+        a: "Yes. You can add existing pupils yourself in a couple of minutes each, or invite them by email or join code to connect from their own phone when they are ready — there is no all-or-nothing migration. Pupils who never want the app can still be run entirely from the instructor's side, with lessons and [payments](/features/payments) marked manually.",
+      },
+      {
+        q: "Will my pupils actually use the app?",
+        a: "It is the usual worry, and the honest answer is that adoption is never forced. Pupils get their own free side of the app for the things they care about — their next lesson, their [credit balance](/features/payments), how close they are to test-ready, and paying by card in a tap — so most take it up quickly. But Pupil Hub does not depend on it: a pupil who never opens the app is still fully managed from your side, so you lose nothing by switching.",
+      },
+      {
+        q: "What if a pupil doesn't want to use an app at all?",
+        a: "They never have to. You can run any pupil entirely from your own side — booking lessons, marking them paid and keeping notes — while they carry on by text or call as before. Parents or guardians who want to keep an eye on lessons get a private, read-only web link instead, so there is still no app for anyone to download.",
+      },
+      {
+        q: "How do I keep track of which pupils owe me money?",
+        a: "Every pupil profile shows what is outstanding to the penny, derived live from real lessons and [card payments](/features/payments) rather than typed in by hand. The pupil list filters down to unpaid balances in a tap, and the 'Follow up today' card surfaces who owes you alongside whose test is days away and who has not rebooked — so chasing money stops being a memory exercise.",
+      },
+      {
+        q: "Can I keep private notes on each pupil?",
+        a: "Yes. Each profile has a private note only the instructor can see — 'nervous on roundabouts', 'mum is paying', 'test booked for the 28th' — kept beside the pupil's lessons, progress and test dates so you turn up to every lesson already knowing where you left off.",
       },
       {
         q: "Can parents follow a learner's driving lessons and progress?",
-        a: "Yes. An instructor can add a parent or guardian to any pupil, giving them a private, read-only web view of lessons, progress and payments. There is no app for them to download, and they can step away whenever they like.",
+        a: "Yes. An instructor can add a parent or guardian to any pupil, giving them a private, read-only web view of lessons, payments and [progress](/features/progress). It is double opt-in, so the guardian confirms by email first; there is no app for them to download, and they can step away whenever they like.",
+      },
+      {
+        q: "Is pupil data kept safe and GDPR compliant?",
+        a: "Pupil records are encrypted in transit and at rest, hosted in the UK and EU, and handled under UK GDPR — and Driive never sells data. The records belong to the instructor's business and can be exported at any time. Full detail is on the [Security page](/security).",
       },
     ],
     related: ["progress", "payments", "enquiries"],
@@ -108,7 +136,7 @@ export const FEATURES: Feature[] = [
     slug: "payments",
     name: "Payments",
     tagline: "Balances right to the penny.",
-    lede: "Card payments in the app, prepaid blocks that track themselves, and payouts in your bank the next day.",
+    lede: "Accept lesson payments in a way that feels easy for pupils and effortless for you. No more cash handling, no more manual tracking, and no more wondering who that bank transfer was from.",
     metaTitle: "Payments — Card payments and blocks for driving instructors",
     metaDescription:
       "Take card payments and sell prepaid blocks as a UK driving instructor. Hours burn on completion, balances are always right, and payouts land the next day.",
@@ -138,6 +166,26 @@ export const FEATURES: Feature[] = [
       {
         q: "When do instructors receive their money?",
         a: "Card payments land in the instructor's bank account the day after they settle — next-day payouts rather than weekly batches. Every payment is recorded in [Accounts & Tax](/features/accounts) automatically, so income never needs reconstructing later.",
+      },
+      {
+        q: "How do I turn on online card payments?",
+        a: "Turning on online payments is a quick, Stripe-hosted setup pre-filled from your Driive details — you confirm your bank account and a few business details, and you're ready to take cards. Driive uses Stripe to process payments and pay out to your bank, so card details are never stored by the instructor.",
+      },
+      {
+        q: "What are the fees for taking card payments?",
+        a: "Card payments carry a small per-transaction fee that covers card processing and next-day payouts — 3.5% on the Free plan and 1.5% on [Driive Pro](/pricing). Recording a cash or bank-transfer payment is always free, and there are no per-pupil or per-booking fees on top.",
+      },
+      {
+        q: "How do refunds work for driving lesson payments?",
+        a: "A pupil can refund an unused payment themselves, instantly, any time before that lesson has paid out to the instructor — no message needed. Once the money has paid out, a contested payment goes through a proper dispute flow instead, with evidence from both sides and a fair resolution, so nobody is left in an awkward standoff over a single lesson.",
+      },
+      {
+        q: "What happens if a prepaid lesson is cancelled?",
+        a: "If a prepaid block lesson is cancelled, its hours flow straight back to the pupil's credit balance on their own — because block hours only ever burn when a lesson is completed. The slot reopens in [the diary](/features/smart-diary) and the credit is ready to rebook, with no manual adjustment.",
+      },
+      {
+        q: "Do pupils need to pay through the app?",
+        a: "No. The app makes it easiest — pupils pay by card or Apple Pay in a tap — but it is never the only way. Instructors can send a payment link to anyone, or simply mark a cash or bank-transfer lesson as paid. Whichever route the money takes, the [pupil's balance](/features/pupil-hub) and the accounts stay right.",
       },
     ],
     related: ["accounts", "pupil-hub", "smart-diary"],
@@ -176,6 +224,22 @@ export const FEATURES: Feature[] = [
       {
         q: "Can pupils see their own driving progress?",
         a: "Yes. Pupils watch their progress build in their own side of the Driive app after every lesson. Seeing how close test-ready is keeps them motivated — and makes the next block of lessons an easy decision.",
+      },
+      {
+        q: "How do you track a learner driver's progress?",
+        a: "Driive gives every pupil the full DVSA syllabus, grouped into categories like junctions, roundabouts, manoeuvres and independent driving. The instructor grades each skill on a six-step scale — introduced, needs practice, improving, confident and test-ready — and the category status and an overall readiness percentage roll up from those grades on their own. It builds lesson by lesson, with no separate logbook to keep.",
+      },
+      {
+        q: "What is a driving lesson progress record or log?",
+        a: "It is a running record of what a learner can do against the skills they will be tested on, updated each lesson. In Driive that record is the DVSA syllabus itself: each skill carries a status, every completed lesson is a chance to mark one off, and a lesson debrief notes what went well, what needs work and the next focus — all kept on the pupil's profile alongside their lessons and test dates.",
+      },
+      {
+        q: "Can learner drivers rate their own confidence on a skill?",
+        a: "Yes. From their own side of the app a pupil can set how confident they feel on any skill, using the same six-step scale the instructor uses. It is a prompt, not a grade — it tells the instructor what feels shaky before the next lesson, so time in the car is spent where it counts.",
+      },
+      {
+        q: "Can I customise the driving syllabus I teach?",
+        a: "Yes. Driive ships with the full DVSA national standard built in, and each instructor can tailor it — rename a skill to their own wording, re-order it, or hide skills they don't use — without affecting anyone else. The shared structure stays intact; your version is yours.",
       },
     ],
     related: ["lesson-tools", "pupil-hub", "smart-diary"],

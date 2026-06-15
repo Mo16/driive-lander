@@ -23,6 +23,11 @@ const SOLUTIONS: Item[] = [
     desc: "Solo ADIs and PDIs",
   },
   {
+    name: "For learner drivers",
+    href: "/learners",
+    desc: "The free pupil app",
+  },
+  {
     name: "For driving schools",
     href: "/schools",
     desc: "Multi-instructor teams",
