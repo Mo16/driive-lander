@@ -1,10 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  CheckCircle2, Loader2, ShieldCheck, User, Phone, Mail, MapPin,
-  CalendarClock, GraduationCap, Send,
-} from "lucide-react";
 import { createClient } from "@/lib/supabase-public";
 import { cn } from "@/lib/cn";
 import { titleCaseName } from "@/lib/site-format";
@@ -134,6 +130,16 @@ export function PublicEnquiryForm({
     };
   }, [embed, code, done, errors, touched, submitAttempted]);
 
+  // The page's "Choose" buttons (Task 4 prices grid) prefill the message.
+  useEffect(() => {
+    function onPrefill(e: Event) {
+      const d = (e as CustomEvent<{ message: string }>).detail;
+      if (d?.message) set("message", d.message);
+    }
+    window.addEventListener("driive:enquiry-prefill", onPrefill);
+    return () => window.removeEventListener("driive:enquiry-prefill", onPrefill);
+  }, []);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitAttempted(true);
@@ -159,12 +165,21 @@ export function PublicEnquiryForm({
 
   if (done) {
     return (
-      <div className="flex animate-fade-in flex-col items-center gap-3 rounded-2xl bg-success-light/60 px-6 py-10 text-center">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-success/15">
-          <CheckCircle2 className="h-10 w-10 text-success" />
-        </span>
-        <h2 className="text-xl font-bold text-ink">Thanks, {form.full_name.split(" ")[0] || "there"}!</h2>
-        <p className="max-w-sm text-sm text-muted">
+      <div className="animate-fade-in flex flex-col items-center gap-3 rounded-xl bg-[var(--paper)] px-6 py-12 text-center">
+        <svg viewBox="0 0 24 24" className="h-9 w-9 text-[var(--brand-deep)]" aria-hidden>
+          <path
+            d="M4.5 12.5 10 18 19.5 6.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <h3 className="font-display text-2xl font-medium text-[var(--ink)]">
+          Thanks, {form.full_name.split(" ")[0] || "there"}!
+        </h3>
+        <p className="max-w-sm text-sm leading-relaxed text-[color-mix(in_oklab,var(--ink)_72%,transparent)]">
           Your enquiry has been sent to {branding.business_name}. They&apos;ll be in touch very soon to
           get you started.
         </p>
@@ -174,7 +189,7 @@ export function PublicEnquiryForm({
 
   return (
     <form onSubmit={submit} noValidate className="space-y-4">
-      <IconField label="Your name" icon={User} error={showErr("full_name")}>
+      <Field label="Your name" error={showErr("full_name")}>
         <input
           className={inputCls(showErr("full_name"))}
           required
@@ -184,10 +199,10 @@ export function PublicEnquiryForm({
           onBlur={() => blur("full_name")}
           placeholder="e.g. Alex Taylor"
         />
-      </IconField>
+      </Field>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <IconField label="Phone" icon={Phone} error={showErr("phone")}>
+        <Field label="Phone" error={showErr("phone")}>
           <input
             className={inputCls(showErr("phone"))}
             type="tel"
@@ -198,8 +213,8 @@ export function PublicEnquiryForm({
             onBlur={() => blur("phone")}
             placeholder="07845 931234"
           />
-        </IconField>
-        <IconField label="Email" icon={Mail} error={showErr("email")}>
+        </Field>
+        <Field label="Email" error={showErr("email")}>
           <input
             className={inputCls(showErr("email"))}
             type="email"
@@ -209,35 +224,43 @@ export function PublicEnquiryForm({
             onBlur={() => blur("email")}
             placeholder="you@email.com"
           />
-        </IconField>
+        </Field>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <IconField label="Postcode" icon={MapPin} error={showErr("postcode")}>
-          <input
-            className={inputCls(showErr("postcode"))}
-            autoComplete="postal-code"
-            value={form.postcode}
-            onChange={(e) => set("postcode", e.target.value.toUpperCase())}
-            onBlur={() => blur("postcode")}
-            placeholder="e.g. M1 4WT"
-          />
-        </IconField>
+        <div className={transOptions.length > 1 ? undefined : "sm:col-span-2"}>
+          <Field label="Postcode" error={showErr("postcode")}>
+            <input
+              className={inputCls(showErr("postcode"))}
+              autoComplete="postal-code"
+              value={form.postcode}
+              onChange={(e) => set("postcode", e.target.value.toUpperCase())}
+              onBlur={() => blur("postcode")}
+              placeholder="e.g. M1 4WT"
+            />
+          </Field>
+        </div>
         {transOptions.length > 1 && (
           <div>
-            <label className={labelCls}>Gearbox</label>
-            <div className="flex rounded-xl border border-line bg-primary-soft p-1">
+            <span className={labelCls}>Gearbox</span>
+            <div
+              role="group"
+              aria-label="Gearbox"
+              className="flex h-11 rounded-lg border border-[color-mix(in_oklab,var(--ink)_12%,transparent)] bg-[#FBFAF8] p-1"
+            >
               {transOptions.map((o) => {
                 const active = form.transmission === o.value;
                 return (
                   <button
                     key={o.value}
                     type="button"
+                    aria-pressed={active}
                     onClick={() => set("transmission", o.value)}
                     className={cn(
-                      "flex-1 rounded-lg px-2 py-2 text-sm font-semibold transition-all active:scale-95",
-                      active ? "bg-primary text-white shadow-glow" : "text-muted hover:text-primary",
+                      "flex-1 rounded-md text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--brand)]",
+                      !active && "text-[color-mix(in_oklab,var(--ink)_60%,transparent)] hover:text-[var(--ink)]",
                     )}
+                    style={active ? { backgroundColor: "var(--brand)", color: "var(--cta-text)" } : undefined}
                   >
                     {o.label}
                   </button>
@@ -249,41 +272,46 @@ export function PublicEnquiryForm({
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <IconField label="When do you want to start?" icon={CalendarClock}>
-          <select
-            className={inputCls() + " appearance-none pr-8"}
-            value={form.preferred_start}
-            onChange={(e) => set("preferred_start", e.target.value)}
-          >
-            <option value="">Choose…</option>
-            {START_OPTIONS.map((o) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </IconField>
-        <IconField label="Your experience" icon={GraduationCap}>
-          <select
-            className={inputCls() + " appearance-none pr-8"}
-            value={form.experience}
-            onChange={(e) => set("experience", e.target.value)}
-          >
-            <option value="">Choose…</option>
-            {EXPERIENCE_OPTIONS.map((o) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </IconField>
+        <Field label="When do you want to start?">
+          <div className="relative">
+            <select
+              className={cn(inputCls(), "appearance-none pr-9")}
+              value={form.preferred_start}
+              onChange={(e) => set("preferred_start", e.target.value)}
+            >
+              <option value="">Choose…</option>
+              {START_OPTIONS.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+            <Chevron />
+          </div>
+        </Field>
+        <Field label="Your experience">
+          <div className="relative">
+            <select
+              className={cn(inputCls(), "appearance-none pr-9")}
+              value={form.experience}
+              onChange={(e) => set("experience", e.target.value)}
+            >
+              <option value="">Choose…</option>
+              {EXPERIENCE_OPTIONS.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+            <Chevron />
+          </div>
+        </Field>
       </div>
 
-      <div>
-        <label className={labelCls}>Anything else? <span className="font-normal text-muted">(optional)</span></label>
+      <Field label="Anything else?" optional>
         <textarea
-          className="w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-subtle outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 min-h-[88px]"
+          className={cn(baseControlCls(), "min-h-[92px] w-full py-2.5")}
           value={form.message}
           onChange={(e) => set("message", e.target.value)}
           placeholder="Availability, goals, questions…"
         />
-      </div>
+      </Field>
 
       {/* Honeypot field, hidden from humans. */}
       <div aria-hidden className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden">
@@ -294,63 +322,102 @@ export function PublicEnquiryForm({
       </div>
 
       {serverError && (
-        <p className="animate-fade-in rounded-xl bg-danger-light px-3 py-2 text-sm font-medium text-danger">{serverError}</p>
+        <p className="animate-fade-in rounded-lg bg-danger-light px-3 py-2 text-sm font-medium text-danger">{serverError}</p>
       )}
 
       <button
         type="submit"
         disabled={busy}
-        className="group flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-base font-bold text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-primary-dark active:translate-y-0 active:scale-[.99] disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm"
+        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[15px] font-medium transition-[filter] hover:brightness-[1.06] disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--brand)]"
+        style={{ backgroundColor: "var(--brand)", color: "var(--cta-text)" }}
       >
-        {busy ? (
-          <Loader2 className="h-5 w-5 animate-spin" />
-        ) : (
-          <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        )}
-        Send my enquiry
+        {busy && <Spinner />}
+        Send enquiry
       </button>
 
-      <p className="flex items-center justify-center gap-1.5 text-center text-xs text-subtle">
-        <ShieldCheck className="h-3.5 w-3.5" />
+      <p className="flex items-center justify-center gap-1.5 text-center text-xs text-[color-mix(in_oklab,var(--ink)_58%,transparent)]">
+        <svg viewBox="0 0 12 12" className="h-3 w-3 shrink-0" aria-hidden>
+          <path
+            d="M2 6.4 4.8 9 10 3.2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.7}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
         No spam — your details go straight to {branding.business_name}.
       </p>
     </form>
   );
 }
 
-// --- Field primitives --------------------------------------------------------
-const labelCls = "mb-1.5 block text-sm font-semibold text-ink";
+// --- Field primitives ----------------------------------------------------------
+const labelCls = "mb-1.5 block text-sm font-medium text-[var(--ink)]";
 
-function inputCls(err?: string): string {
+/** Warm input surface + brand focus, shared by inputs, selects and the textarea. */
+function baseControlCls(err?: string): string {
   return cn(
-    "peer w-full rounded-xl border bg-surface pl-10 pr-3.5 h-11 text-sm text-ink placeholder:text-subtle outline-none transition focus:ring-2",
+    "rounded-lg border bg-[#FBFAF8] px-3.5 text-sm text-[var(--ink)] outline-none transition",
+    "placeholder:text-[color-mix(in_oklab,var(--ink)_38%,transparent)] focus:ring-2",
     err
       ? "border-danger focus:border-danger focus:ring-danger/20"
-      : "border-line focus:border-primary focus:ring-primary/20",
+      : "border-[color-mix(in_oklab,var(--ink)_12%,transparent)] focus:border-[var(--brand)] focus:ring-[color-mix(in_oklab,var(--brand)_25%,transparent)]",
   );
 }
 
-function IconField({
-  label, icon: Icon, error, children,
+function inputCls(err?: string): string {
+  return cn("h-11 w-full", baseControlCls(err));
+}
+
+function Field({
+  label, error, optional, children,
 }: {
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
   error?: string;
+  optional?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <label className={labelCls}>{label}</label>
-      <div className="group relative">
-        <Icon
-          className={cn(
-            "pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors",
-            error ? "text-danger" : "text-subtle group-focus-within:text-primary",
-          )}
-        />
-        {children}
-      </div>
+    <label className="block">
+      <span className={labelCls}>
+        {label}
+        {optional && (
+          <span className="font-normal text-[color-mix(in_oklab,var(--ink)_55%,transparent)]"> (optional)</span>
+        )}
+      </span>
+      {children}
       {error && <span className="mt-1 block text-xs font-medium text-danger">{error}</span>}
-    </div>
+    </label>
+  );
+}
+
+/** Bare hand-drawn chevron for the selects — no icon pack. */
+function Chevron() {
+  return (
+    <svg
+      viewBox="0 0 10 6"
+      aria-hidden
+      className="pointer-events-none absolute right-3.5 top-1/2 h-[7px] w-[11px] -translate-y-1/2 text-[color-mix(in_oklab,var(--ink)_48%,transparent)]"
+    >
+      <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Spinner() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-4 w-4 animate-spin" aria-hidden>
+      <circle
+        cx="8"
+        cy="8"
+        r="6.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeDasharray="28 13"
+      />
+    </svg>
   );
 }

@@ -85,9 +85,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-GB" className="scroll-smooth">
+    // sentient.variable must sit on <html>: the @theme --font-display var is
+    // defined at :root and resolves var(--font-sentient) there, so declaring
+    // the font variable any lower in the tree leaves it unresolvable.
+    <html lang="en-GB" className={`scroll-smooth ${sentient.variable}`}>
       <body
-        className={`${GeistSans.className} ${sentient.variable} bg-white text-neutral-900 antialiased`}
+        className={`${GeistSans.className} bg-white text-neutral-900 antialiased`}
       >
         <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
         <MarketingChrome>
