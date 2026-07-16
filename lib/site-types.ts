@@ -42,6 +42,27 @@ export interface InstructorSiteGalleryItem {
   caption?: string;
 }
 
+/** One FAQ entry ({q, a}) editable via the site studio, rendered as a native accordion. */
+export interface SiteFaq {
+  q: string;
+  a: string;
+}
+
+/** One vehicle from the instructor's fleet, surfaced on the site with its reg stripped. */
+export interface SiteCar {
+  name: string;
+  transmission: "manual" | "automatic" | null;
+}
+
+/** Instructor's social links — all optional, rendered only when present + https. */
+export interface SocialLinks {
+  instagram?: string;
+  facebook?: string;
+  tiktok?: string;
+  youtube?: string;
+  google?: string;
+}
+
 /** Public-safe website data for the rendered page (instructor_site RPC). */
 export interface InstructorSitePublic {
   instructor_id: string;
@@ -70,4 +91,13 @@ export interface InstructorSitePublic {
   form_code: string | null;
   published: boolean;
   is_pro: boolean; // false once the instructor's Pro plan lapses — site goes dark
+  years_experience: number | null;
+  pupils_passed: number | null;
+  pass_rate_percent: number | null;
+  badges: string[];
+  faqs: SiteFaq[];
+  social_links: SocialLinks;
+  show_cars: boolean;
+  accepting_new_pupils: boolean;
+  cars: SiteCar[];
 }

@@ -5,7 +5,7 @@
  * These power the public instructor site rendered at /schools/[slug] — its
  * components use classes like bg-bg / text-ink / shadow-card / animate-fade-in.
  * Values are the EXACT hexes/shadows from the admin config. In Tailwind v4 a
- * --color-* var generates bg-*/text-*/border-*/fill-*/ring-* utilities, a
+ * --color-* var generates bg-* / text-* / border-* / fill-* / ring-* utilities, a
  * --shadow-* var generates shadow-*, and --animate-* pairs with @keyframes.
  * ------------------------------------------------------------------------- */
 @theme {
@@ -38,6 +38,8 @@
   --shadow-glow: 0 4px 16px rgba(37, 70, 245, 0.10);
 
   --animate-fade-in: fade-in 0.2s ease-out;
+
+  --font-display: var(--font-sentient), ui-serif, Georgia, serif;
 }
 
 @keyframes fade-in {
@@ -54,4 +56,11 @@
 ::selection {
   background: #f9d7e2;
   color: #2546f5;
+}
+
+/* Fine film grain for instructor-site washes — sits on the surface, behind content. */
+.site-grain {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.05; mix-blend-mode: multiply;
 }

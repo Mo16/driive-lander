@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
+import { MarketingChrome } from "@/components/marketing-chrome";
+import { sentient } from "@/app/site-fonts";
 import { JsonLd, organizationJsonLd, webSiteJsonLd } from "@/lib/json-ld";
 import {
   DEFAULT_DESCRIPTION,
@@ -85,12 +87,16 @@ export default function RootLayout({
   return (
     <html lang="en-GB" className="scroll-smooth">
       <body
-        className={`${GeistSans.className} bg-white text-neutral-900 antialiased`}
+        className={`${GeistSans.className} ${sentient.variable} bg-white text-neutral-900 antialiased`}
       >
         <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
-        <Nav />
+        <MarketingChrome>
+          <Nav />
+        </MarketingChrome>
         {children}
-        <Footer />
+        <MarketingChrome>
+          <Footer />
+        </MarketingChrome>
       </body>
     </html>
   );

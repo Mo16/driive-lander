@@ -16,9 +16,10 @@ async function getSite(slug: string): Promise<InstructorSitePublic | null> {
   try {
     const supabase = createClient();
     const { data } = await supabase.rpc("instructor_site", { p_slug: slug });
-    const row = Array.isArray(data) ? data[0] : data;
+    const row = (Array.isArray(data) ? data[0] : data) as Partial<InstructorSitePublic> | undefined;
     if (!row) return null;
-    // Tolerate PostgREST's string-encoded numerics + null jsonb arrays.
+    // Tolerate PostgREST's string-encoded numerics + null jsonb arrays, and
+    // default the migration-0123 fields until that migration is applied.
     return {
       ...(row as InstructorSitePublic),
       gallery: Array.isArray(row.gallery) ? row.gallery : [],
@@ -26,6 +27,15 @@ async function getSite(slug: string): Promise<InstructorSitePublic | null> {
       reviews: Array.isArray(row.reviews) ? row.reviews : [],
       review_count: Number(row.review_count) || 0,
       rating: Number(row.rating) || 0,
+      badges: Array.isArray(row.badges) ? row.badges : [],
+      faqs: Array.isArray(row.faqs) ? row.faqs : [],
+      cars: Array.isArray(row.cars) ? row.cars : [],
+      social_links: row.social_links ?? {},
+      show_cars: row.show_cars ?? true,
+      accepting_new_pupils: row.accepting_new_pupils ?? true,
+      years_experience: row.years_experience ?? null,
+      pupils_passed: row.pupils_passed ?? null,
+      pass_rate_percent: row.pass_rate_percent ?? null,
     };
   } catch {
     return null;
