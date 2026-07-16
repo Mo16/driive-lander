@@ -1,5 +1,56 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+ * Instructor-site design tokens (ported from driive-admin/tailwind.config.ts).
+ * These power the public instructor site rendered at /schools/[slug] — its
+ * components use classes like bg-bg / text-ink / shadow-card / animate-fade-in.
+ * Values are the EXACT hexes/shadows from the admin config. In Tailwind v4 a
+ * --color-* var generates bg-*/text-*/border-*/fill-*/ring-* utilities, a
+ * --shadow-* var generates shadow-*, and --animate-* pairs with @keyframes.
+ * ------------------------------------------------------------------------- */
+@theme {
+  --color-bg: #F7F7F8;
+  --color-surface: #FFFFFF;
+  --color-ink: #18181B;
+  --color-muted: #70707B;
+  --color-subtle: #A0A0AB;
+  --color-line: #ECECEE;
+  --color-line-strong: #E0E0E4;
+  --color-hover: #F4F4F5;
+  --color-surface-soft: #FAFAFA;
+
+  --color-primary: #2546F5;
+  --color-primary-dark: #1B35C8;
+  --color-primary-light: #EDF0FE;
+  --color-primary-soft: #F5F7FF;
+
+  --color-accent: #F9D7E2;
+  --color-accent-dark: #B42E63;
+  --color-accent-light: #FDEFF4;
+
+  --color-danger: #E5484D;
+  --color-danger-light: #FDEDEE;
+  --color-success: #16A34A;
+  --color-success-light: #E8F7EE;
+
+  --shadow-card: 0 1px 2px rgba(24, 24, 27, 0.03);
+  --shadow-pop: 0 4px 16px rgba(24, 24, 27, 0.08);
+  --shadow-glow: 0 4px 16px rgba(37, 70, 245, 0.10);
+
+  --animate-fade-in: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 ::selection {
   background: #f9d7e2;
   color: #2546f5;
